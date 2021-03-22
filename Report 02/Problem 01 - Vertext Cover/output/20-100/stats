@@ -1,0 +1,1 @@
+------Answers------A*:  [1, 17] 2 In 2 itarationsGreedy Best-first search:  [1, 17] 2 In 2 itarationsHill-Climbing:  [3, 1, 0] 3 In 3 itarationsHill-Climbing with random start:  [9, 3, 1] 3 In 2 itarationsSimulated Annealing search:  [5, 3, 19] 3 In 685 itarationsSimulated Annealing searchwith random start:  [19, 15, 8, 4] 4 In 685 itarations
