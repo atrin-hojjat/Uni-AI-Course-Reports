@@ -11,7 +11,7 @@ SMP_DATA = {"X": [], "Y": [], "name": ""}
 def GEN_SMP_DATA():
     return {"X": [], "Y": [], "name": ""}
 
-def TestByN(start=5, end=30, diff=1, tries=10, p=.16):
+def TestByN(start=5, end=25, diff=2, tries=10, p=.2):
     success_rate = [] 
     iterations = []
     res = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
