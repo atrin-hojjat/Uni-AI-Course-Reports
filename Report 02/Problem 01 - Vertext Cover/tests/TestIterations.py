@@ -8,13 +8,16 @@ import rich
 
 SMP_DATA = {"X": [], "Y": [], "name": ""}
 
-def TestByN(start=5, end=30, diff=1, tries=10):
+def GEN_SMP_DATA():
+    return {"X": [], "Y": [], "name": ""}
+
+def TestByN(start=5, end=30, diff=1, tries=10, p=.16):
     success_rate = [] 
     iterations = []
-    res = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA)]
-    res1 = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA)]
+    res = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA()]
+    res1 = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA()]
     names = ['A*', 'Greedy best-first search',
             'Hill-climbing', 'Annealing']
 
@@ -60,13 +63,13 @@ def TestByN(start=5, end=30, diff=1, tries=10):
     plot_data('Test success rate by N', 'N', 'Success rate %',
             res1, 'TestByN')
 
-def TestByP(start=0.05, end=0.5, diff=0.05, tries=10, nodes=20):
+def TestByP(start=0.1, end=0.5, diff=0.02, tries=10, nodes=20):
     success_rate = [] 
     iterations = []
-    res = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA)]
-    res1 = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA)]
+    res = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA()]
+    res1 = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA()]
     names = ['A*', 'Greedy best-first search',
             'Hill-climbing', 'Annealing']
 
@@ -114,14 +117,14 @@ def TestByP(start=0.05, end=0.5, diff=0.05, tries=10, nodes=20):
             'P', 'Success rate %',
             res1, 'TestByP')
 
-def TestSuccessByRandStart(start=0, end=0.5, diff=0.02, tries=30,
+def TestSuccessByRandStart(start=1.4, end=0.5, diff=0.02, tries=15,
         p=0.2, nodes=20):
     success_rate = [] 
     iterations = []
-    res = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA), dict(SMP_DATA)]
-    res1 = [dict(SMP_DATA), dict(SMP_DATA), dict(SMP_DATA),
-            dict(SMP_DATA), dict(SMP_DATA)]
+    res = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA(), GEN_SMP_DATA()]
+    res1 = [GEN_SMP_DATA(), GEN_SMP_DATA(), GEN_SMP_DATA(),
+            GEN_SMP_DATA(), GEN_SMP_DATA()]
     names = ['A*', 'Hill-climbing random start', 'Annealing random start',
             'Hill-climbing 0 start', 'Annealing 0 start']
 
