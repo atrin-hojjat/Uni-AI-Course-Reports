@@ -8,13 +8,13 @@ def Test(save=False):
     TestGenWithRandomEdges(20, 0.2, save)
     TestGenWithRandomEdges(20, 0.12, save)
     #  TestGenWithRandomEdges(20, 0.1, save)
-    TestGenWithRandomEdges(30, 0.2, save)
-    TestGenWithRandomEdges(30, 0.12, save)
+    #  TestGenWithRandomEdges(30, 0.2, save)
+    #  TestGenWithRandomEdges(30, 0.12, save)
 
     #  TestGenWithConstantEdges(20, 10, save)
     #  TestGenWithConstantEdges(20, 50, save)
     TestGenWithConstantEdges(20, 100, save)
-    TestGenWithConstantEdges(30, 40, save)
+    #  TestGenWithConstantEdges(30, 40, save)
     TestGenWithConstantEdges(20, 140, save)
     #  thread.start_new_thread(TestGenWithRandomEdges, (20, 0.3,
     #      save))
