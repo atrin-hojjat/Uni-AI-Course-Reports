@@ -1,0 +1,158 @@
+\chapter{شرح مسئله و روند کار}
+
+\section{مقدمه}
+مسئله پوشش راسی مسئله انتخاب رئوسی از گراف است بطوری که هر راس یا انتخاب شده باشد یا همسایه‌ای انتخاب‌شده داشته باشد. این مسئله
+\verb;NP Complete;
+و دارای  الگوریتم تخمین می‌باشد.
+
+
+در این گزارش این این مسئله را با استفاده از راه‌حل‌های 
+\verb;Huristic;
+حل خواهیم کرد.
+
+\chapter{توابع ابتدایی}
+\section{تولید گراف تصادفی}
+برای تولید گراف تصادفی دو تابع مورد استفاده قرار گرفته است.
+تابع
+\verb;gen_graph_eq_prob_edges;
+گرافی با
+$nodes$
+راس تولید میکند که هر یال با احتمال
+$p$
+در آن حضور دارد.
+
+
+تابع
+\verb;gen_graph_fix_set_edges;
+گرافی با
+$nodes$
+راس و  
+$edges$
+یال تصادفی می‌کند.
+
+\section{بررسی هدف}
+تابع
+\verb;utils;
+در 
+\verb;solutions;
+ روی تمام یال ‌های رئوس انتخاب شده می‌گردد  و رئوس دیده‌شده را علامت می‌زند.
+ زمان اجرای این تابع
+ $O(EV)$
+ و حافظه‌ی آن
+ $O(V)$
+  می‌باشد.
+ به دلیل محدود بودن کل عملایات های چک کردن حالت بهینه به
+ $NP$
+ برای بهینه‌سازی این توابع تلاشی نشده‌است.
+
+\chapter{الگوریتم‌ها}
+\section{$A*$}
+\verb;A*;
+نوعی خاصی از
+\verb;Best-first search;
+است که در تابع تخمین وزن، وزن مسیر تا آن لحظه نیز محاسبه می‌شود.
+\section{تخمین و روش محاسبه}
+فرض کنید
+ $G$
+ گراف مورد نظر ما باشد.
+ در حالتی که در آن مجموعه
+ ‌$C={v_{1},... v_{t}}$
+  انتخاب شده‌اند
+برای محاسبه تابع 
+\verb;Heuristic;
+از فرمول
+\begin{equation}
+\label{e01}
+h(C) = \frac{n(G - C)}{\max\limits_{v \in {G - C - nei(C)}} {deg(v) + 1}}
+\end{equation}
+استفاده میکنیم
+\subsection{بررسی \ttfamily{Admissibility}}
+به وضوح انتخاب هر راس انتخاب نشده حداکثر
+$\max\limits_{v \in {G - C}} {deg(v) + 1}$
+راس جدید را پوشش میدهد پس بوضوح داریم 
+\begin{equation}
+\label{e01}
+h(C) \leq h*(C)
+\end{equation}
+یعنی تابع هیوریستیکمان 
+\verb;Admissible;
+می‌باشد پس می‌توان نتیجه گرفت که 
+\verb;A*;
+جواب بهینه می‌دهد و درنتیجه 
+‌‌$NP$
+است.
+
+\subsection{نمونه ها}
+
+\insertfig{figures/A* Results graph 20-0.2.pgf}{$P=0.2$}
+\insertfig{figures/A* Results graph 20-0.3.pgf}{$P=0.3$}
+\insertfig{figures/A* Results graph 20-0.12.pgf}{$P=0.12$}
+
+
+\section{\ttfamily{Greedy best-first search}}
+برای این الگوریتم نیز از همان تابع هیوریستیکی که در بالا استفاده شد استفاده میکنیم و پیاده سازی این الگوریتم کاملا مشابه 
+$A*$
+است.
+
+\subsection{نمونه ها}
+
+\insertfig{figures/Greedy best-first search Results graph 20-0.2.pgf}{$P=0.2$}
+\insertfig{figures/Greedy best-first search Results graph 20-0.3.pgf}{$P=0.3$}
+\insertfig{figures/Greedy best-first search Results graph 20-0.12.pgf}{$P=0.12$}
+
+
+
+\section{\ttfamily{Hill-climbing}}
+\subsection{تابع تخمین ارزش}
+مقدار این تابع باید طوری باشد که با افزایش راس‌های پوشش یافته زیاد شود و با افزایش تعداد رئوس انتخاب‌شده کاهش یابد.
+اگر ضریب این دو مقدار برابر باشند یعنی تابع به فرم
+$-|C| -|G - C - nei(C)| $
+باشد، الگوریتم لزومی در انتخاب یال‌های بدیهی نخواهد داشت.
+برای همین ضریب 
+$|G - C - nei(C)|$
+را 
+$-2$
+قرار دادیم و برای مثبت نگه داشتن کل عبارت را با
+$2|G|$
+جمع کردیم.
+پس تابع به فرم
+\begin{equation}
+\label{e01}
+E(C) = 2 |G| - 2 |G - C - nei(C)| - |C|
+\end{equation}
+خواهد بود.
+\subsection{همسایگی}
+دو حالت را همسایه میگوییم هرگاه یکی با حذف دقیقا یک عضو به دیگری تبدیل شود.
+
+\subsection{شروع تصادفی}
+برای افزایش احتمال پیدا کردن جواب درست میتوانیم بجای شروع از مجموعه خالی، از مجموعه‌ای از اعضای تصادفی انتخاب شده استفاده کنیم بطوری که احتمال حضور هر یک از آن‌ها در مجموعه‌ی اولیهبرابر متغییر
+\ttfamily{rand\_start}
+\rmfamily
+باشد.
+
+\subsection{نمونه ها}
+
+\insertfig{figures/Hill-climbing Results graph 20-0.2.pgf}{$P=0.2$}
+\insertfig{figures/Hill-climbing Results graph 20-0.3.pgf}{$P=0.3$}
+\insertfig{figures/Hill-climbing Results graph 20-0.12.pgf}{$P=0.12$}
+
+
+\section{\ttfamily{Annealing Search}}
+برای پیاده سازی این الگوریتم از تابع ارزش‌گذاری مانند بالا استفاده میکنیم. تغییرات دما به فرم 
+$T_{next}=0.98 T_{now}$
+با حداقل دمای  $0.000001$ و دمای اولیه 1 ثبت شده‌اند.
+
+\subsection{نمونه ها}
+
+\insertfig{figures/Annealing Search Results graph 20-0.2.pgf}{$P=0.2$}
+\insertfig{figures/Annealing Search Results graph 20-0.3.pgf}{$P=0.3$}
+\insertfig{figures/Annealing Search Results graph 20-0.12.pgf}{$P=0.12$}
+
+
+\chapter{مقایسه روش‌های متفاوت}
+
+
+\insertfig{figures/Test number of iterations by edge existance possibility.pgf}{تعداد تکرار‌های برنامه به نسبت احتمال وجود هر یال}
+
+\insertfig{figures/Test success rate by edge existance possibility.pgf}{درصد یافتن جواب درست با افزایش احتمال وجود هر یال}
+

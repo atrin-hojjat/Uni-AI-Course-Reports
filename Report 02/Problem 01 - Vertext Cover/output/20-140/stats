@@ -1,1 +1,7 @@
-------Answers------A*:  [0, 4] 2 In 2 itarationsGreedy Best-first search:  [0, 4] 2 In 2 itarationsHill-Climbing:  [17, 0] 2 In 2 itarationsHill-Climbing with random start:  [17, 0] 2 In 2 itarationsSimulated Annealing search:  [9, 0] 2 In 685 itarationsSimulated Annealing searchwith random start:  [3, 8] 2 In 685 itarations
+------Answers------
+A*:  [0, 18] 2 In 2 itarations
+Greedy Best-first search:  [0, 18] 2 In 2 itarations
+Hill-Climbing:  [1, 2] 2 In 2 itarations
+Hill-Climbing with random start:  [8, 1] 2 In 1 itarations
+Simulated Annealing search:  [1, 8] 2 In 685 itarations
+Simulated Annealing searchwith random start:  [2, 7] 2 In 685 itarations
