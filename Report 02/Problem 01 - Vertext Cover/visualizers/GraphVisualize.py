@@ -1,9 +1,12 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import matplotlib
 import os
 
 def visualize_vertex_cover(graph, vertex_cover=[], name="",
         output=None):
+    plt.figure()
+    #  plt.title(name)
     G = nx.Graph()
     color_map = []
     for i in range(len(graph)):
@@ -32,5 +35,13 @@ def visualize_vertex_cover(graph, vertex_cover=[], name="",
                 if exc.errno != errno.EEXIST:
                     raise
         plt.savefig(os.path.join("./output", output, f"{name}.jpg"))
+        matplotlib.use("pgf")
+        matplotlib.rcParams.update({
+            "pgf.texsystem": "pdflatex",
+            'font.family': 'mononoki Nerd Font Mono',
+            'text.usetex': True,
+            'pgf.rcfonts': False,
+        })
+        plt.savefig(os.path.join("./output", output, f"{name}.pgf"))
     plt.show()
 
