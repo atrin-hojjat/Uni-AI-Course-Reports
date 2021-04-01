@@ -2,4 +2,4 @@
 Reports for university ai course
 
 # Reports
-- [Implementing Heuristic algorithms on Vertex Cover problem](Report 02)
+- [Implementing Heuristic algorithms on Vertex Cover problem](Report 02/)
