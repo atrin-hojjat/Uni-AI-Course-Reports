@@ -31,7 +31,7 @@
 \chapter{توابع ابتدایی}
 \section{تولید گراف تصادفی}
 برای تولید گراف تصادفی دو تابع مورد استفاده قرار گرفته است.
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/generators/__init__.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/generators/__init__.py}}
 تابع
 \verb;gen_graph_eq_prob_edges;
 گرافی با
@@ -98,7 +98,7 @@ def gen_graph_fix_set_edges(nodes=100, edges=900):
 \section{بررسی هدف}
 تابع
 \lr{utils}
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/utils.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/solutions/utils.py}}
 در 
 \lr{solutions}
  روی تمام یال ‌های رئوس انتخاب شده می‌گردد  و رئوس دیده‌شده را علامت می‌زند.
@@ -141,13 +141,13 @@ def is_goal(graph, state):
 \verb;networkx;
 \LTRfootnote{\url{https://networkx.org/documentation/stable/}}
 استفاده شده.
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/tree/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/visualizers}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/tree/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/visualizers}}
  
 \chapter{الگوریتم‌ها}
 \section{$A*$}
 \lr{A*}
 \LTRfootnote{\url{https://en.wikipedia.org/wiki/A*_search_algorithm}}
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/AStar.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/solutions/AStar.py}}
 نوعی خاصی از
 \lr{Best-first search}
 است که در تابع تخمین وزن، وزن مسیر تا آن لحظه نیز محاسبه می‌شود.
@@ -214,7 +214,7 @@ $P=0.12$
 \section{\lr{\ttfamily{Greedy best-first search}}}
 برای این الگوریتم
 \LTRfootnote{\url{https://en.wikipedia.org/wiki/Best-first_search}}
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/GreedyBestFirst.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/solutions/GreedyBestFirst.py}}
  نیز از همان تابع هیوریستیکی که در بالا استفاده شد استفاده میکنیم و پیاده سازی این الگوریتم کاملا مشابه 
 $A*$
 است البته هزینه‌ی صرف شده تا این نقطه را در نظر نمی‌گیریم یعنی:
@@ -252,7 +252,7 @@ $P=0.12$
 \section{\lr{\ttfamily{Hill-climbing}}}
 این الگوریتم
 \LTRfootnote{\url{https://en.wikipedia.org/wiki/Hill_climbing}}
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/HillClimbing.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/solutions/HillClimbing.py}}
  بالا رفتن از یک تپه را شبیه‌سازی می‌کند.
 \subsection{تابع تخمین ارزش}
 مقدار این تابع باید طوری باشد که با افزایش راس‌های پوشش یافته زیاد شود و با افزایش تعداد رئوس انتخاب‌شده کاهش یابد.
@@ -309,7 +309,7 @@ $P=0.12$
 \section{\lr{\ttfamily{Annealing Search}}}
 برای پیاده سازی این الگوریتم
 \LTRfootnote{\url{https://en.wikipedia.org/wiki/Simulated_annealing}}
-\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/AnnealingSearch.py}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Dominating\%20Set/solutions/AnnealingSearch.py}}
  از تابع ارزش‌گذاری مانند بالا استفاده میکنیم. تغییرات دما به فرم 
 $T_{next}=0.98 T_{now}$
 با حداقل دمای  $0.000001$ و دمای اولیه 1 ثبت شده‌اند.
