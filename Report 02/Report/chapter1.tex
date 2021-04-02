@@ -1,18 +1,29 @@
 \chapter{شرح مسئله و روند کار}
 
 \section{مقدمه}
-مسئله پوشش راسی مسئله انتخاب رئوسی از گراف است بطوری که هر راس یا انتخاب شده باشد یا همسایه‌ای انتخاب‌شده داشته باشد. این مسئله
-\verb;NP Complete;
+مسئله مجموعه‌ی غالب مسئله انتخاب رئوسی از گراف است بطوری که هر راس یا انتخاب شده باشد یا همسایه‌ای انتخاب‌شده داشته باشد. این مسئله
+\lr{NP Complete}
 و دارای  الگوریتم تخمین می‌باشد.
-
+این مسئله دارای کاربردهای بسیاری در زمینه‌هایی
+ مانند تئوری شبکه‌های اجتماعی
+\LTRfootnote{Social network theory}
+ ، شبکه‌های ارتباطی کامپیوتر‌ها
+\LTRfootnote{Computer communication network}
+ ، شبکه‌های بیسیم ادهاک
+\LTRfootnote{Mobile Ad-hoc network - MANET}
+  و شبکه‌های حسگر بیسیم
+\LTRfootnote{Wireless sensor network - WSN}
+می‌باشد.
+\cite{sasireka2014applications}
 
 در این گزارش این این مسئله را با استفاده از راه‌حل‌های 
-\verb;Huristic;
+\lr{Heuristic}
 حل خواهیم کرد.
 
 \chapter{توابع ابتدایی}
 \section{تولید گراف تصادفی}
 برای تولید گراف تصادفی دو تابع مورد استفاده قرار گرفته است.
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/generators/__init__.py}}
 تابع
 \verb;gen_graph_eq_prob_edges;
 گرافی با
@@ -20,7 +31,25 @@ $nodes$
 راس تولید میکند که هر یال با احتمال
 $p$
 در آن حضور دارد.
+\begin{latin}
+\begin{python}
+def gen_graph_eq_prob_edges(nodes=100, p=0.1):
+    """
+    Generates a graph with $nodes vertices where each edge has a $p probibility of existing. 
+    The graph is represented by a list of vertices each represented as a list of vertices it's connected to.
+    O(nodes ^ 2)
+    """
+    graph = [[] for i in range(nodes)]
 
+    for i in range(nodes):
+        for j in range(i):
+            if random.random() < p:
+                graph[i].append(j)
+                graph[j].append(i)
+    return graph
+
+\end{python}
+\end{latin}
 
 تابع
 \verb;gen_graph_fix_set_edges;
@@ -30,11 +59,40 @@ $nodes$
 $edges$
 یال تصادفی می‌کند.
 
+\begin{latin}
+\begin{python}
+def gen_graph_fix_set_edges(nodes=100, edges=900):
+    """
+    Generates a graph with $nodes vertices and $edges edges
+    The graph is represented by a list of vertices each represented as a list of vertices it's connected to.
+    O(nodes ^ 2)
+    """
+    graph = [[] for i in range(nodes)]
+
+    all_edges = []
+    
+    for i in range(nodes):
+        for j in range(i):
+            all_edges.append((i, j, ))
+
+    for i in range(edges):
+        x = random.randrange(0, len(all_edges))
+        edge = all_edges[x]
+        graph[edge[0]].append(edge[1])
+        graph[edge[1]].append(edge[0])
+        all_edges.pop(x)
+
+    return graph
+
+\end{python}
+\end{latin}
+
 \section{بررسی هدف}
 تابع
-\verb;utils;
+\lr{utils}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/utils.py}}
 در 
-\verb;solutions;
+\lr{solutions}
  روی تمام یال ‌های رئوس انتخاب شده می‌گردد  و رئوس دیده‌شده را علامت می‌زند.
  زمان اجرای این تابع
  $O(EV)$
@@ -44,14 +102,47 @@ $edges$
  به دلیل محدود بودن کل عملایات های چک کردن حالت بهینه به
  $NP$
  برای بهینه‌سازی این توابع تلاشی نشده‌است.
+ 
+ \section{تصویر سازی}
+ برای نمایش دادن نمودارهای برنامه از
+\verb;matplotlib;
+\LTRfootnote{\url{https://matplotlib.org/}}
+ و برای گراف‌ها از
+\verb;networkx;
+\LTRfootnote{\url{https://networkx.org/documentation/stable/}}
+استفاده شده.
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/tree/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/visualizers}}
+ 
+ \begin{latin}
+ \begin{python}
+ import math
+import heapq
+import random
+
+def is_goal(graph, state):
+    ls = {}
+    for i in range(len(graph)):
+        ls[i] = ""
+    for v in state:
+        if v in ls:
+            del ls[v]
+        for u in graph[v]:
+            if u in ls:
+                del ls[u]
+    return len(ls) == 0, [*ls.keys()], ls
+
+ \end{python}
+ \end{latin}
 
 \chapter{الگوریتم‌ها}
 \section{$A*$}
-\verb;A*;
+\lr{A*}
+\LTRfootnote{\url{https://en.wikipedia.org/wiki/A*_search_algorithm}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/AStar.py}}
 نوعی خاصی از
-\verb;Best-first search;
+\lr{Best-first search}
 است که در تابع تخمین وزن، وزن مسیر تا آن لحظه نیز محاسبه می‌شود.
-\section{تخمین و روش محاسبه}
+\subsection{تخمین و روش محاسبه}
 فرض کنید
  $G$
  گراف مورد نظر ما باشد.
@@ -59,50 +150,67 @@ $edges$
  ‌$C={v_{1},... v_{t}}$
   انتخاب شده‌اند
 برای محاسبه تابع 
-\verb;Heuristic;
+\lr{Heuristic}
 از فرمول
 \begin{equation}
 \label{e01}
-h(C) = \frac{n(G - C)}{\max\limits_{v \in {G - C - nei(C)}} {deg(v) + 1}}
+h(C) = \frac{n(G - C - nei(C))}{\max\limits_{v \in {G - C - nei(C)}} {deg_{G - C - nei(C)}(v) + 1}}
+\end{equation}
+\begin{equation}
+\label{e02}
+f(C) = h(C) + n(C)
 \end{equation}
 استفاده میکنیم
-\subsection{بررسی \ttfamily{Admissibility}}
-به وضوح انتخاب هر راس انتخاب نشده حداکثر
-$\max\limits_{v \in {G - C}} {deg(v) + 1}$
-راس جدید را پوشش میدهد پس بوضوح داریم 
+\subsection{بررسی \lr{\ttfamily{Admissibility}}}
+به وضوح، انتخاب هر راس انتخاب نشده حداکثر به اندازه‌ی درجه‌اش در گراف باقی مانده، راس جدید را پوشش میدهد. درنتیجه اگر درجه‌ی همه‌ی رئوسی که از این نقطه انتخاب می‌کنیم، برابر حداکثر درجه‌ی گراف باقی مانده باشد و هیچ راسی را دوبار پوشش ندهیم،
+$h(C)$
+راس دیگر باید انتخاب شود تا همه‌ی رئوس گراف پوشیده شده‌باشد.
+ پس بوضوح داریم :
 \begin{equation}
-\label{e01}
-h(C) \leq h*(C)
+\label{e03}
+h(C) \leq h^*(C)
 \end{equation}
 یعنی تابع هیوریستیکمان 
-\verb;Admissible;
+\lr{Admissible}
 می‌باشد پس می‌توان نتیجه گرفت که 
-\verb;A*;
+\lr{A*}
 جواب بهینه می‌دهد و درنتیجه 
 ‌‌$NP$
 است.
 
 \subsection{نمونه ها}
 
-\insertfig{figures/A* Results graph 20-0.2.pgf}{$P=0.2$}
-\insertfig{figures/A* Results graph 20-0.3.pgf}{$P=0.3$}
-\insertfig{figures/A* Results graph 20-0.12.pgf}{$P=0.12$}
+\insertfig{figures/A* Results graph 20-0.2.pgf}{\lr{A* on $N=20, P=0.2$}}
+\insertfig{figures/A* Results graph 20-0.3.pgf}{\lr{A* on $N=20, P=0.3$}}
+\insertfig{figures/A* Results graph 20-0.12.pgf}{\lr{A* on $N=20, P=0.12$}}
 
 
-\section{\ttfamily{Greedy best-first search}}
-برای این الگوریتم نیز از همان تابع هیوریستیکی که در بالا استفاده شد استفاده میکنیم و پیاده سازی این الگوریتم کاملا مشابه 
+\section{\lr{\ttfamily{Greedy best-first search}}}
+برای این الگوریتم
+\LTRfootnote{\url{https://en.wikipedia.org/wiki/Best-first_search}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/GreedyBestFirst.py}}
+ نیز از همان تابع هیوریستیکی که در بالا استفاده شد استفاده میکنیم و پیاده سازی این الگوریتم کاملا مشابه 
 $A*$
-است.
+است البته هزینه‌ی صرف شده تا این نقطه را در نظر نمی‌گیریم یعنی:
+\begin{equation}
+\label{e04}
+f(C)=h(C)
+\end{equation}
+
 
 \subsection{نمونه ها}
 
-\insertfig{figures/Greedy best-first search Results graph 20-0.2.pgf}{$P=0.2$}
-\insertfig{figures/Greedy best-first search Results graph 20-0.3.pgf}{$P=0.3$}
-\insertfig{figures/Greedy best-first search Results graph 20-0.12.pgf}{$P=0.12$}
+\insertfig{figures/Greedy best-first search Results graph 20-0.2.pgf}{\lr{Greedy best-first on $N=20, P=0.2$}}
+\insertfig{figures/Greedy best-first search Results graph 20-0.3.pgf}{\lr{Greedy best-first on $N=20, P=0.3$}}
+\insertfig{figures/Greedy best-first search Results graph 20-0.12.pgf}{\lr{Greedy best-first on $N=20, P=0.12$}}
 
 
 
-\section{\ttfamily{Hill-climbing}}
+\section{\lr{\ttfamily{Hill-climbing}}}
+این الگوریتم
+\LTRfootnote{\url{https://en.wikipedia.org/wiki/Hill_climbing}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/HillClimbing.py}}
+ بالا رفتن از یک تپه را شبیه‌سازی می‌کند.
 \subsection{تابع تخمین ارزش}
 مقدار این تابع باید طوری باشد که با افزایش راس‌های پوشش یافته زیاد شود و با افزایش تعداد رئوس انتخاب‌شده کاهش یابد.
 اگر ضریب این دو مقدار برابر باشند یعنی تابع به فرم
@@ -132,27 +240,39 @@ E(C) = 2 |G| - 2 |G - C - nei(C)| - |C|
 
 \subsection{نمونه ها}
 
-\insertfig{figures/Hill-climbing Results graph 20-0.2.pgf}{$P=0.2$}
-\insertfig{figures/Hill-climbing Results graph 20-0.3.pgf}{$P=0.3$}
-\insertfig{figures/Hill-climbing Results graph 20-0.12.pgf}{$P=0.12$}
+\insertfig{figures/Hill-climbing Results graph 20-0.2.pgf}{\lr{Hill-climbing on $N=20, P=0.2$}}
+\insertfig{figures/Hill-climbing Results graph 20-0.3.pgf}{\lr{Hill-climbing on $N=20, P=0.3$}}
+\insertfig{figures/Hill-climbing Results graph 20-0.12.pgf}{\lr{Hill-climbing on $N=20, P=0.12$}}
 
 
-\section{\ttfamily{Annealing Search}}
-برای پیاده سازی این الگوریتم از تابع ارزش‌گذاری مانند بالا استفاده میکنیم. تغییرات دما به فرم 
+\section{\lr{\ttfamily{Annealing Search}}}
+برای پیاده سازی این الگوریتم
+\LTRfootnote{\url{https://en.wikipedia.org/wiki/Simulated_annealing}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2002/Problem\%2001\%20-\%20Vertext\%20Cover/solutions/AnnealingSearch.py}}
+ از تابع ارزش‌گذاری مانند بالا استفاده میکنیم. تغییرات دما به فرم 
 $T_{next}=0.98 T_{now}$
 با حداقل دمای  $0.000001$ و دمای اولیه 1 ثبت شده‌اند.
 
 \subsection{نمونه ها}
 
-\insertfig{figures/Annealing Search Results graph 20-0.2.pgf}{$P=0.2$}
-\insertfig{figures/Annealing Search Results graph 20-0.3.pgf}{$P=0.3$}
-\insertfig{figures/Annealing Search Results graph 20-0.12.pgf}{$P=0.12$}
+\insertfig{figures/Annealing Search Results graph 20-0.2.pgf}{\lr{Annealing on $N=20, P=0.2$}}
+\insertfig{figures/Annealing Search Results graph 20-0.3.pgf}{\lr{Annealing on $N=20, P=0.3$}}
+\insertfig{figures/Annealing Search Results graph 20-0.12.pgf}{\lr{Annealing on $N=20, P=0.12$}}
 
 
 \chapter{مقایسه روش‌های متفاوت}
 
 
-\insertfig{figures/Test number of iterations by edge existance possibility.pgf}{تعداد تکرار‌های برنامه به نسبت احتمال وجود هر یال}
+\insertfig{figures/TestByP/Test number of iterations by edge existance possibility.pgf}{تعداد تکرار‌های برنامه به نسبت احتمال وجود هر یال}
 
-\insertfig{figures/Test success rate by edge existance possibility.pgf}{درصد یافتن جواب درست با افزایش احتمال وجود هر یال}
+\insertfig{figures/TestByP/Test success rate by edge existance possibility.pgf}{درصد یافتن جواب درست با افزایش احتمال وجود هر یال}
+
+\insertfig{figures/TestByP/Distance from best answer.pgf}{اختلاف تعداد رئوس با بهترین جواب با تافزایش احتمال وجود هر یال}
+
+
+\insertfig{figures/TestByN/Test number of iterations by N.pgf}{تعداد تکرار‌های برنامه با افزایش تعداد رئوس}
+
+\insertfig{figures/TestByN/Test success rate by N.pgf}{درصد یافتن جواب درست با افزایش تعداد رئوس}
+
+\insertfig{figures/TestByN/Distance from best answer.pgf}{اختلاف تعداد رئوس با بهترین جواب با افزایش تعداد رئوس}
 
