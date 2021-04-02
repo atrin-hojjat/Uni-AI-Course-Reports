@@ -6,12 +6,6 @@
 %% Make sure the required packages are loaded in your preamble
 %%   \usepackage{pgf}
 %%
-%% and, on pdftex
-%%   \usepackage[utf8]{inputenc}\DeclareUnicodeCharacter{2212}{-}
-%%
-%% or, on luatex and xetex
-%%   \usepackage{unicode-math}
-%%
 %% Figures using additional raster images can only be included by \input if
 %% they are in the same directory as the main LaTeX file. For loading figures
 %% from other directories you can use the `import` package
@@ -76,7 +70,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{1.025455in}{0.528000in}%
+\pgfsys@transformshift{1.138182in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -84,7 +78,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=1.025455in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.20}\)}%
+\pgftext[x=1.138182in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.125}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -101,7 +95,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{1.589091in}{0.528000in}%
+\pgfsys@transformshift{1.701818in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -109,7 +103,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=1.589091in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.21}\)}%
+\pgftext[x=1.701818in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.150}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -126,7 +120,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{2.152727in}{0.528000in}%
+\pgfsys@transformshift{2.265455in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -134,7 +128,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.152727in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.22}\)}%
+\pgftext[x=2.265455in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.175}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -151,7 +145,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{2.716364in}{0.528000in}%
+\pgfsys@transformshift{2.829091in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -159,7 +153,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.716364in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.23}\)}%
+\pgftext[x=2.829091in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.200}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -176,7 +170,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{3.280000in}{0.528000in}%
+\pgfsys@transformshift{3.392727in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -184,7 +178,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.280000in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.24}\)}%
+\pgftext[x=3.392727in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.225}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -201,7 +195,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{3.843636in}{0.528000in}%
+\pgfsys@transformshift{3.956364in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -209,7 +203,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.843636in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.25}\)}%
+\pgftext[x=3.956364in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.250}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -226,7 +220,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{4.407273in}{0.528000in}%
+\pgfsys@transformshift{4.520000in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -234,7 +228,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=4.407273in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.26}\)}%
+\pgftext[x=4.520000in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.275}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -251,7 +245,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{4.970909in}{0.528000in}%
+\pgfsys@transformshift{5.083636in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -259,7 +253,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=4.970909in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.27}\)}%
+\pgftext[x=5.083636in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.300}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -276,7 +270,7 @@
 \pgfusepath{stroke,fill}%
 }%
 \begin{pgfscope}%
-\pgfsys@transformshift{5.534545in}{0.528000in}%
+\pgfsys@transformshift{5.647273in}{0.528000in}%
 \pgfsys@useobject{currentmarker}{}%
 \end{pgfscope}%
 \end{pgfscope}%
@@ -284,7 +278,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=5.534545in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.28}\)}%
+\pgftext[x=5.647273in,y=0.430778in,,top]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont \(\displaystyle {0.325}\)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
@@ -533,7 +527,10 @@
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{1.025455in}{4.056000in}}%
-\pgfpathlineto{\pgfqpoint{3.280000in}{4.056000in}}%
+\pgfpathlineto{\pgfqpoint{1.927273in}{4.056000in}}%
+\pgfpathlineto{\pgfqpoint{2.829091in}{4.056000in}}%
+\pgfpathlineto{\pgfqpoint{3.730909in}{4.056000in}}%
+\pgfpathlineto{\pgfqpoint{4.632727in}{4.056000in}}%
 \pgfpathlineto{\pgfqpoint{5.534545in}{4.056000in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
@@ -547,8 +544,11 @@
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{1.025455in}{1.116000in}}%
-\pgfpathlineto{\pgfqpoint{3.280000in}{1.536000in}}%
-\pgfpathlineto{\pgfqpoint{5.534545in}{0.696000in}}%
+\pgfpathlineto{\pgfqpoint{1.927273in}{0.696000in}}%
+\pgfpathlineto{\pgfqpoint{2.829091in}{1.116000in}}%
+\pgfpathlineto{\pgfqpoint{3.730909in}{0.696000in}}%
+\pgfpathlineto{\pgfqpoint{4.632727in}{1.956000in}}%
+\pgfpathlineto{\pgfqpoint{5.534545in}{1.116000in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
@@ -560,9 +560,12 @@
 \definecolor{currentstroke}{rgb}{0.266667,0.733333,1.000000}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{1.025455in}{1.956000in}}%
-\pgfpathlineto{\pgfqpoint{3.280000in}{4.056000in}}%
-\pgfpathlineto{\pgfqpoint{5.534545in}{2.376000in}}%
+\pgfpathmoveto{\pgfqpoint{1.025455in}{3.216000in}}%
+\pgfpathlineto{\pgfqpoint{1.927273in}{2.796000in}}%
+\pgfpathlineto{\pgfqpoint{2.829091in}{4.056000in}}%
+\pgfpathlineto{\pgfqpoint{3.730909in}{2.376000in}}%
+\pgfpathlineto{\pgfqpoint{4.632727in}{2.376000in}}%
+\pgfpathlineto{\pgfqpoint{5.534545in}{4.056000in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
@@ -574,9 +577,12 @@
 \definecolor{currentstroke}{rgb}{0.988235,0.341176,0.368627}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{1.025455in}{1.116000in}}%
-\pgfpathlineto{\pgfqpoint{3.280000in}{1.116000in}}%
-\pgfpathlineto{\pgfqpoint{5.534545in}{1.116000in}}%
+\pgfpathmoveto{\pgfqpoint{1.025455in}{2.376000in}}%
+\pgfpathlineto{\pgfqpoint{1.927273in}{1.536000in}}%
+\pgfpathlineto{\pgfqpoint{2.829091in}{1.956000in}}%
+\pgfpathlineto{\pgfqpoint{3.730909in}{1.536000in}}%
+\pgfpathlineto{\pgfqpoint{4.632727in}{0.696000in}}%
+\pgfpathlineto{\pgfqpoint{5.534545in}{1.536000in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
@@ -640,15 +646,15 @@
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetstrokeopacity{0.800000}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{2.102374in}{1.943044in}}%
-\pgfpathlineto{\pgfqpoint{4.457626in}{1.943044in}}%
-\pgfpathquadraticcurveto{\pgfqpoint{4.485404in}{1.943044in}}{\pgfqpoint{4.485404in}{1.970822in}}%
-\pgfpathlineto{\pgfqpoint{4.485404in}{2.781178in}}%
-\pgfpathquadraticcurveto{\pgfqpoint{4.485404in}{2.808956in}}{\pgfqpoint{4.457626in}{2.808956in}}%
-\pgfpathlineto{\pgfqpoint{2.102374in}{2.808956in}}%
-\pgfpathquadraticcurveto{\pgfqpoint{2.074596in}{2.808956in}}{\pgfqpoint{2.074596in}{2.781178in}}%
-\pgfpathlineto{\pgfqpoint{2.074596in}{1.970822in}}%
-\pgfpathquadraticcurveto{\pgfqpoint{2.074596in}{1.943044in}}{\pgfqpoint{2.102374in}{1.943044in}}%
+\pgfpathmoveto{\pgfqpoint{0.897222in}{0.597444in}}%
+\pgfpathlineto{\pgfqpoint{3.252474in}{0.597444in}}%
+\pgfpathquadraticcurveto{\pgfqpoint{3.280252in}{0.597444in}}{\pgfqpoint{3.280252in}{0.625222in}}%
+\pgfpathlineto{\pgfqpoint{3.280252in}{1.435578in}}%
+\pgfpathquadraticcurveto{\pgfqpoint{3.280252in}{1.463356in}}{\pgfqpoint{3.252474in}{1.463356in}}%
+\pgfpathlineto{\pgfqpoint{0.897222in}{1.463356in}}%
+\pgfpathquadraticcurveto{\pgfqpoint{0.869444in}{1.463356in}}{\pgfqpoint{0.869444in}{1.435578in}}%
+\pgfpathlineto{\pgfqpoint{0.869444in}{0.625222in}}%
+\pgfpathquadraticcurveto{\pgfqpoint{0.869444in}{0.597444in}}{\pgfqpoint{0.897222in}{0.597444in}}%
 \pgfpathclose%
 \pgfusepath{stroke,fill}%
 \end{pgfscope}%
@@ -659,15 +665,15 @@
 \definecolor{currentstroke}{rgb}{0.066667,0.133333,0.200000}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{2.130152in}{2.700286in}}%
-\pgfpathlineto{\pgfqpoint{2.407930in}{2.700286in}}%
+\pgfpathmoveto{\pgfqpoint{0.925000in}{1.354687in}}%
+\pgfpathlineto{\pgfqpoint{1.202778in}{1.354687in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.519041in,y=2.651675in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont A*}%
+\pgftext[x=1.313889in,y=1.306075in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont A*}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetrectcap%
@@ -676,15 +682,15 @@
 \definecolor{currentstroke}{rgb}{0.400000,0.800000,0.600000}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{2.130152in}{2.493445in}}%
-\pgfpathlineto{\pgfqpoint{2.407930in}{2.493445in}}%
+\pgfpathmoveto{\pgfqpoint{0.925000in}{1.147845in}}%
+\pgfpathlineto{\pgfqpoint{1.202778in}{1.147845in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.519041in,y=2.444834in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Greedy best-first search}%
+\pgftext[x=1.313889in,y=1.099234in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Greedy best-first search}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetrectcap%
@@ -693,15 +699,15 @@
 \definecolor{currentstroke}{rgb}{0.266667,0.733333,1.000000}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{2.130152in}{2.287282in}}%
-\pgfpathlineto{\pgfqpoint{2.407930in}{2.287282in}}%
+\pgfpathmoveto{\pgfqpoint{0.925000in}{0.941682in}}%
+\pgfpathlineto{\pgfqpoint{1.202778in}{0.941682in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.519041in,y=2.238671in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Hill-climbing}%
+\pgftext[x=1.313889in,y=0.893071in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Hill-climbing}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetrectcap%
@@ -710,15 +716,15 @@
 \definecolor{currentstroke}{rgb}{0.988235,0.341176,0.368627}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{2.130152in}{2.081119in}}%
-\pgfpathlineto{\pgfqpoint{2.407930in}{2.081119in}}%
+\pgfpathmoveto{\pgfqpoint{0.925000in}{0.735519in}}%
+\pgfpathlineto{\pgfqpoint{1.202778in}{0.735519in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.519041in,y=2.032508in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Annealing}%
+\pgftext[x=1.313889in,y=0.686908in,left,base]{\color{textcolor}\setmainfont{mononoki Nerd Font Mono}\rmfamily\fontsize{10.000000}{12.000000}\selectfont Annealing}%
 \end{pgfscope}%
 \end{pgfpicture}%
 \makeatother%
