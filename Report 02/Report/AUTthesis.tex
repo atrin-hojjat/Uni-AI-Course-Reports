@@ -60,11 +60,12 @@
 \input{commands}
 
 
-\newcommand{\insertfig}[2]{%
+\newcommand{\insertfig}[3]{%
 \begin{figure}%
 	\begin{center}%
 		\ttfamily%
 		\input{#1}%
+		\label{#3}%
 		\rmfamily%
 	\end{center}%
 	\caption{#2}%
