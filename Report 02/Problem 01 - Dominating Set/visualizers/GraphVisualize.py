@@ -3,20 +3,20 @@ import matplotlib.pyplot as plt
 import matplotlib
 import os
 
-def visualize_vertex_cover(graph, vertex_cover=[], name="",
+def visualize_dominating_set(graph, dominating_set=[], name="",
         output=None):
     plt.figure()
     #  plt.title(name)
     G = nx.Graph()
     color_map = []
     for i in range(len(graph)):
-        if i in vertex_cover:
+        if i in dominating_set:
             color_map.append("#66CC99")
-        elif len([j for j in graph[i] if j in vertex_cover]):
+        elif len([j for j in graph[i] if j in dominating_set]):
             color_map.append("#112233")
         else:
             color_map.append("#FC575E")
-    G.add_nodes_from([(i, {"color": "red" if i in vertex_cover else
+    G.add_nodes_from([(i, {"color": "red" if i in dominating_set else
         "blue"}) for i in range(len(graph))])
 
     G.add_edges_from(

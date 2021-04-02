@@ -1,6 +1,6 @@
 from solutions import AStar, GreedyBestFirst, HillClimbing, AnnealingSearch
 from generators import *
-from visualizers.GraphVisualize import visualize_vertex_cover
+from visualizers.GraphVisualize import visualize_dominating_set
 import os
 
 def Test(save=False):
@@ -115,9 +115,9 @@ def TestGraph(g, output=None):
         f.write("\n")
         f.close()
 
-    visualize_vertex_cover(g, astar_ans, name=f"A* Results graph {output}", output=output)
-    visualize_vertex_cover(g, gbfs_ans, name=f"Greedy best-first search Results graph {output}", output=output)
-    visualize_vertex_cover(g, hc_ans, name=f"Hill-Climbing Results graph {output}", output=output)
-    visualize_vertex_cover(g, hc_rnd_08_ans, name=f"Hill-Climbing with random start(0.08) Results graph {output}", output=output)
-    visualize_vertex_cover(g, annealing_ans, name=f"Annealing Search Results graph {output}", output=output)
-    visualize_vertex_cover(g, annealing_rnd_08_ans, name=f"Annealing Search with randmo start(0.08) Resultsngraph {output}", output=output)
+    visualize_dominating_set(g, astar_ans, name=f"A* Results graph {output}", output=output)
+    visualize_dominating_set(g, gbfs_ans, name=f"Greedy best-first search Results graph {output}", output=output)
+    visualize_dominating_set(g, hc_ans, name=f"Hill-Climbing Results graph {output}", output=output)
+    visualize_dominating_set(g, hc_rnd_08_ans, name=f"Hill-Climbing with random start(0.08) Results graph {output}", output=output)
+    visualize_dominating_set(g, annealing_ans, name=f"Annealing Search Results graph {output}", output=output)
+    visualize_dominating_set(g, annealing_rnd_08_ans, name=f"Annealing Search with randmo start(0.08) Resultsngraph {output}", output=output)
