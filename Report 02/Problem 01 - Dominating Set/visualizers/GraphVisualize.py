@@ -1,7 +1,9 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use("pgf")
+import matplotlib.pyplot as plt
 import os
+import rich
 
 def visualize_dominating_set(graph, dominating_set=[], name="",
         output=None):
@@ -16,16 +18,21 @@ def visualize_dominating_set(graph, dominating_set=[], name="",
             color_map.append("#112233")
         else:
             color_map.append("#FC575E")
-    G.add_nodes_from([(i, {"color": "red" if i in dominating_set else
-        "blue"}) for i in range(len(graph))])
+    G.add_nodes_from([(i, ) for i in range(len(graph))])
 
+    rich.print([(i, ) for i in range(len(graph))])
+    rich.print(
+            [
+                (i, j, {"color": "#112233"}) 
+                for i in range(len(graph)) for j in graph[i] if i < j
+            ])
     G.add_edges_from(
             [
                 (i, j, {"color": "#112233"}) 
                 for i in range(len(graph)) for j in graph[i] if i < j
             ]
     )
-    pos = nx.spring_layout(G)
+    pos = nx.spring_layout(G, seed=10)
     nx.draw_networkx_edges(G, pos, alpha=0.2)
     nx.draw_networkx_nodes(G, pos, node_color=color_map, node_size=100)
     if output:
@@ -35,7 +42,6 @@ def visualize_dominating_set(graph, dominating_set=[], name="",
                 if exc.errno != errno.EEXIST:
                     raise
         plt.savefig(os.path.join("./output", output, f"{name}.jpg"))
-        matplotlib.use("pgf")
         matplotlib.rcParams.update({
             "pgf.texsystem": "pdflatex",
             'font.family': 'mononoki Nerd Font Mono',
