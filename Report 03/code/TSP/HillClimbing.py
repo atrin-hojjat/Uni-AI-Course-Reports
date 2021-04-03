@@ -1,4 +1,3 @@
-from solutions.utils import *
 import numpy as np
 
 def hill_climbing(graph, rand_start=0):
@@ -7,12 +6,12 @@ def hill_climbing(graph, rand_start=0):
         for j in i:
             TOTAL_SUM += j
     def evaluate(state):
-        return TOTAL_SUM - sum([graph[cell[i - 1]][cell[i]] for i in range(len(graph))])
+        return TOTAL_SUM - sum([graph[state[i - 1]][state[i]] for i in range(len(graph))])
 
     def neighbors(state):
         ret = []
 
-        for i in range(len(graph)):
+        for i in range(len(graph) - 1):
             ret.append([*state[:i], state[i + 1], state[i], *state[i + 2:]])
 
         ret.append([state[-1], *state[1: -1], state[0]])
@@ -35,7 +34,7 @@ def hill_climbing(graph, rand_start=0):
                 selected_neighbor = (val, neighbor)
 
             if selected_neighbor[1] == state[1]:
-                return state[1], steps
+                return state[1], steps, state[0]
 
             state = selected_neighbor
             steps += 1

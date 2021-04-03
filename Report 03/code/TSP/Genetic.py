@@ -13,6 +13,7 @@ def genetic_algorithm(graph, max_iters=10000, fitness_threshold=0.01, population
     def mutate(cell):
         ind = random.randrange(len(graph))
         cell[ind], cell[ind - 1] = cell[ind - 1], cell[ind]
+        return cell
 
     def crossover(parent0, parent1):
         start, end = random.randrange(len(graph)), random.randrange(len(graph))
@@ -23,7 +24,7 @@ def genetic_algorithm(graph, max_iters=10000, fitness_threshold=0.01, population
             child[i] = parent0[i]
         ptr = 0
         for i in range(len(graph)):
-            if child[i] == None:
+            if child[i] != None:
                 continue
             while parent1[ptr] in child:
                 ptr += 1
@@ -34,23 +35,23 @@ def genetic_algorithm(graph, max_iters=10000, fitness_threshold=0.01, population
     def select_parents(population):
         #  tp = population.transpose()
         #  return np.random.choice(tp[1], 2, tp[0])
-        return random.random.choice(
-                [p[1] for p in population], k=2
+        return random.choices(
+                [p[1] for p in population], k=2,
                 weights=[p[0] for p in population])
 
     initial_population = []
     for i in range(population_size):
         new = None
         while new is None or new in initial_population:
-            new = np.random.permutation(len(graph))
+            new = list(np.random.permutation(len(graph)))
         initial_population.append((fitness(new), new))
     population = initial_population
 
-    best = initial_population(0)
+    best = initial_population[0]
 
     for i in range(max_iters):
         for i in population:
-            if best[0] > i[0]:
+            if best[0] < i[0]:
                 best = i
         new_pop = []
 
@@ -62,6 +63,9 @@ def genetic_algorithm(graph, max_iters=10000, fitness_threshold=0.01, population
             ft = fitness(child)
             new_pop.append((ft, child))
         population = new_pop
+    for i in population:
+        if best[0] < i[0]:
+            best = i
 
     return best[1], max_iters, best[0]
             

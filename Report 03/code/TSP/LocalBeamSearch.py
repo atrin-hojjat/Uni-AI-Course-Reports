@@ -1,18 +1,17 @@
-from solutions.utils import *
 import numpy as np
 
-def LocalBeamSearch(graph, k=10):
+def local_beam_search(graph, k=10, max_iters=10000):
     TOTAL_SUM = 0
     for i in graph:
         for j in i:
             TOTAL_SUM += j
     def evaluate(state):
-        return TOTAL_SUM - sum([graph[cell[i - 1]][cell[i]] for i in range(len(graph))])
+        return TOTAL_SUM - sum([graph[state[i - 1]][state[i]] for i in range(len(graph))])
 
     def neighbors(state):
         ret = []
 
-        for i in range(len(graph)):
+        for i in range(len(graph) - 1):
             ret.append([*state[:i], state[i + 1], state[i], *state[i + 2:]])
 
         ret.append([state[-1], *state[1: -1], state[0]])
@@ -21,26 +20,26 @@ def LocalBeamSearch(graph, k=10):
     
     initials = []
     for i in range(k):
-        new = np.random.permutation(len(graph))
-        val = evaluate(new)
-        initials.append((val, new))
+        nn = np.random.permutation(len(graph))
+        val = evaluate(nn)
+        initials.append((val, nn))
 
     states = initials
 
-    steps = 0
-    while True:
+    for steps in range(max_iters):
+        #  for state in states:
+        #      if if_goal(state[1]):
+        #          return state[1], steps
+        new_states = []
         for state in states:
-            if if_goal(state[1]):
-                return state[1], steps
-        new_states = [*states]
-        for state in states:
-            for ns in neighbors(state):
+            mn = state
+            for ns in neighbors(state[1]):
                 val = evaluate(ns)
-                np = (val, ns)
-                if np in new_states:
-                    continue
-                new_states.append(np)
-        new_states.sort(key=lambda x: x[0])
+                nn = (val, ns)
+                if mn[0] < nn[0]:
+                    mn = nn
+            new_states.append(mn)
         states = new_states[:k]
 
-        steps += 1
+    new_states.sort(key=lambda x: x[0])
+    return states[0][1], max_iters, states[0][0]

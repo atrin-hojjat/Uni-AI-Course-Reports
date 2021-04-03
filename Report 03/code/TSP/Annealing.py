@@ -1,7 +1,8 @@
-from solutions.utils import *
 import numpy as np
+import random
+import math
 
-def annealing_search(graph, rand_start=0, initial_temprature=1,
+def annealing_search(graph, rand_start=1, initial_temprature=1,
         schedule=lambda T, t: T * 0.98,
         min_temprature=0.000001):
     TOTAL_SUM = 0
@@ -9,21 +10,21 @@ def annealing_search(graph, rand_start=0, initial_temprature=1,
         for j in i:
             TOTAL_SUM += j
     def evaluate(state):
-        return TOTAL_SUM - sum([graph[cell[i - 1]][cell[i]] for i in range(len(graph))])
+        return TOTAL_SUM - sum([graph[state[i - 1]][state[i]] for i in range(len(graph))])
 
     def neighbors(state):
         ret = []
 
-        for i in range(len(graph)):
+        for i in range(len(graph) - 1):
             ret.append([*state[:i], state[i + 1], state[i], *state[i + 2:]])
 
         ret.append([state[-1], *state[1: -1], state[0]])
 
         return ret
     
-    gen_start = range(len(graph))
+    gen_start = [i for i in range(len(graph))]
     if rand_start == 1:
-        gen_start = np.random.permutation(len(graph)) - 1
+        gen_start = np.random.permutation(len(graph))
 
     state = (evaluate(gen_start), gen_start)
 
@@ -32,7 +33,7 @@ def annealing_search(graph, rand_start=0, initial_temprature=1,
     t, T = 1, initial_temprature
     while True:
         if T < min_temprature:
-            return state[1], t
+            return state[1], t, state[0]
         cur_neighbors = pcurn if pcurn is not None else neighbors(state[1])
         nxid = random.randrange(0, len(cur_neighbors))
         nxt = cur_neighbors[nxid]
