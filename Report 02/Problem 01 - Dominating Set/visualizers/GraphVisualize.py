@@ -18,7 +18,7 @@ def visualize_dominating_set(graph, dominating_set=[], name="",
             color_map.append("#112233")
         else:
             color_map.append("#FC575E")
-    G.add_nodes_from([(i, ) for i in range(len(graph))])
+    G.add_nodes_from([i for i in range(len(graph))])
 
     rich.print([(i, ) for i in range(len(graph))])
     rich.print(
