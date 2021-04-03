@@ -1,7 +1,7 @@
 ------Answers------
-A*:  [0, 8, 11, 13] 4 In 108 itarations
-Greedy Best-first search:  [8, 11, 13, 16] 4 In 4 itarations
-Hill-Climbing:  [13, 8, 7, 10] 4 In 4 itarations
-Hill-Climbing with random start:  [3, 5, 0, 11, 13] 5 In 3 itarations
-Simulated Annealing search:  [1, 16, 6, 19, 17, 18] 6 In 685 itarations
-Simulated Annealing searchwith random start:  [10, 3, 12, 2, 17, 13] 6 In 685 itarations
+A*:  [4, 10, 14] 3 In 19 itarations
+Greedy Best-first search:  [8, 9, 10, 13, 14] 5 In 33 itarations
+Hill-Climbing:  [4, 14, 10] 3 In 5 itarations
+Hill-Climbing with random start:  [14, 4, 10] 3 In 6 itarations
+Simulated Annealing search:  [6, 0, 12, 11, 8] 5 In 685 itarations
+Simulated Annealing searchwith random start:  [8, 0, 17, 15, 7, 5] 6 In 685 itarations
