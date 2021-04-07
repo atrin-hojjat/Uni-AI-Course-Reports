@@ -19,7 +19,11 @@ def gen_sat(variables=20, p=0.2):
         for j in range(i + 1):
             for k in range(j + 1):
                 if random.random() < p:
-                    sat.append((k, j, i))
+                    clause = [k + 1, j + 1, i + 1]
+                    for t in range(3):
+                        if random.random() < 0.5:
+                            clause[t] = -clause[t]
+                    sat.append(tuple(clause))
 
     return sat
 
