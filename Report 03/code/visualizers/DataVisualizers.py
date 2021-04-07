@@ -9,22 +9,12 @@ import numpy as np
 import rich
 import seaborn as sns
 
-def SetupLibraries():
-    matplotlib.rcParams.update({
-        "pgf.texsystem": "xelatex",
-        'text.usetex': True,
-        'pgf.rcfonts': False,
-        "font.family": "mononoki Nerd Font Mono",
-        "font.serif": [],
-        #  "font.cursive": ["mononoki Nerd Font", "mononoki Nerd Font Mono"],
-    })
 
 def visualize_line(testname, x_lab, y_lab, ls, output=None, hue="Runner"):
-    plt.figure()
+    print(ls, hue, x_lab, y_lab, )
+    sns.relplot(data=ls, hue=hue, x=x_lab, y=y_lab, kind="line", )
+
     plt.title(testname)
-
-    sns.relplot(data=ls, hue=hue, x=x_lab, y=y_lab, kind="line", style="event")
-
     plt.xlabel(x_lab)
     plt.ylabel(y_lab)
     if output:
