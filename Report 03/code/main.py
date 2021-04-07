@@ -1,7 +1,11 @@
 import LoadTSP
 import LoadSAT
+from visualizers import SetupLibraries
+
 
 if __name__ == '__main__':
+    SetupLibraries()
+
     #  print("Loading TSP")
     #  LoadTSP.load_samples()
 
