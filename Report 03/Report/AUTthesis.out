@@ -1,0 +1,31 @@
+\BOOKMARK [0][-]{section*.3}{فهرست اشکال}{}% 1
+\BOOKMARK [0][-]{section*.4}{فهرست جداول}{}% 2
+\BOOKMARK [0][-]{chapter.1}{شرح مسئله و روند کار}{}% 3
+\BOOKMARK [1][-]{section.1.1}{مقدمه}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{کدها و خروجی‌های برنامه}{chapter.1}% 5
+\BOOKMARK [0][-]{chapter.2}{توابع ابتدایی}{}% 6
+\BOOKMARK [1][-]{section.2.1}{تولید گراف تصادفی}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.2}{تولید 3-SAT تصادفی}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.3}{تصویر سازی}{chapter.2}% 9
+\BOOKMARK [1][-]{section.2.4}{نمایش TSP}{chapter.2}% 10
+\BOOKMARK [0][-]{chapter.3}{پیاده‌سازی TSP}{}% 11
+\BOOKMARK [1][-]{section.3.1}{جواب بهینه}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.2}{تخمین ارزش}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.3}{همسایگی}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.4}{Local\040Beam\040Search}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.5}{Annealing\040Search}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.6}{الگوریتم ژنتیکی}{chapter.3}% 17
+\BOOKMARK [2][-]{subsection.3.6.1}{تولید مثل}{section.3.6}% 18
+\BOOKMARK [2][-]{subsection.3.6.2}{Mutation}{section.3.6}% 19
+\BOOKMARK [1][-]{section.3.7}{خروجی‌های نمونه}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.8}{مقایسه‌ی نتایج}{chapter.3}% 21
+\BOOKMARK [0][-]{chapter.4}{پیاده‌سازی 3-SAT}{}% 22
+\BOOKMARK [1][-]{section.4.1}{تخمین ارزش}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.2}{همسایگی}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.3}{Local\040Beam\040Search}{chapter.4}% 25
+\BOOKMARK [1][-]{section.4.4}{Annealing\040Search}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.5}{الگوریتم ژنتیکی}{chapter.4}% 27
+\BOOKMARK [2][-]{subsection.4.5.1}{تولید مثل}{section.4.5}% 28
+\BOOKMARK [2][-]{subsection.4.5.2}{Mutation}{section.4.5}% 29
+\BOOKMARK [0][-]{appendix*.5}{منابع و مراجع}{}% 30
+\BOOKMARK [0][-]{appendix*.6}{پیوست}{}% 31

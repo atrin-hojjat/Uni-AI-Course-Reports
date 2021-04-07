@@ -1,0 +1,36 @@
+\edef \SavedTocDepth {\the \value {tocdepth}}
+\setcounter {tocdepth}{-10}
+\contentsline {chapter}{فهرست اشکال}{ج}{section*.3}%
+\contentsline {chapter}{فهرست جداول}{د}{section*.4}%
+\par عنوان\hfill صفحه \par 
+\setcounter {tocdepth}{\SavedTocDepth }
+\contentsline {chapter}{\numberline {1}شرح مسئله و روند کار}{1}{chapter.1}%
+\contentsline {section}{\numberline {1-1}مقدمه}{2}{section.1.1}%
+\contentsline {section}{\numberline {1-2}کدها و خروجی‌های برنامه}{2}{section.1.2}%
+\contentsline {chapter}{\numberline {2}توابع ابتدایی}{3}{chapter.2}%
+\contentsline {section}{\numberline {2-1}تولید گراف تصادفی}{4}{section.2.1}%
+\contentsline {section}{\numberline {2-2}تولید \lr {\ttfamily {3-SAT}} تصادفی}{4}{section.2.2}%
+\contentsline {section}{\numberline {2-3}تصویر سازی}{5}{section.2.3}%
+\contentsline {section}{\numberline {2-4}نمایش \lr {\ttfamily {TSP}}}{5}{section.2.4}%
+\contentsline {chapter}{\numberline {3}پیاده‌سازی \lr {\ttfamily {TSP}}}{8}{chapter.3}%
+\contentsline {section}{\numberline {3-1}جواب بهینه}{9}{section.3.1}%
+\contentsline {section}{\numberline {3-2}تخمین ارزش}{9}{section.3.2}%
+\contentsline {section}{\numberline {3-3}همسایگی}{9}{section.3.3}%
+\contentsline {section}{\numberline {3-4}\lr {\ttfamily {Local Beam Search}}}{9}{section.3.4}%
+\contentsline {section}{\numberline {3-5}\lr {\ttfamily {Annealing Search}}}{10}{section.3.5}%
+\contentsline {section}{\numberline {3-6}الگوریتم ژنتیکی}{10}{section.3.6}%
+\contentsline {subsection}{\numberline {3-6-1}تولید مثل}{10}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3-6-2}\lr {\ttfamily {Mutation}}}{11}{subsection.3.6.2}%
+\contentsline {section}{\numberline {3-7}خروجی‌های نمونه}{15}{section.3.7}%
+\contentsline {section}{\numberline {3-8}مقایسه‌ی نتایج}{15}{section.3.8}%
+\contentsline {chapter}{\numberline {4}پیاده‌سازی \lr {\ttfamily {3-SAT}}}{16}{chapter.4}%
+\contentsline {section}{\numberline {4-1}تخمین ارزش}{17}{section.4.1}%
+\contentsline {section}{\numberline {4-2}همسایگی}{17}{section.4.2}%
+\contentsline {section}{\numberline {4-3}\lr {\ttfamily {Local Beam Search}}}{17}{section.4.3}%
+\contentsline {section}{\numberline {4-4}\lr {\ttfamily {Annealing Search}}}{17}{section.4.4}%
+\contentsline {section}{\numberline {4-5}الگوریتم ژنتیکی}{17}{section.4.5}%
+\contentsline {subsection}{\numberline {4-5-1}تولید مثل}{18}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4-5-2}\lr {\ttfamily {Mutation}}}{18}{subsection.4.5.2}%
+\contentsline {chapter}{منابع و مراجع}{19}{appendix*.5}%
+\contentsline {chapter}{پیوست}{20}{appendix*.6}%
+\contentsfinish 

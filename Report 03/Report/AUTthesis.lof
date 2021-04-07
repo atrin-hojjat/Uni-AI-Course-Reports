@@ -1,0 +1,11 @@
+\hspace *{.5cm}شکل\hfill صفحه \par 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3-1}{\ignorespaces \lr {Simulated Annealing on $N=20$}}}{11}{figure.3.1}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces \lr {Genetic Algorithm on $N=20$}}}{12}{figure.3.2}%
+\contentsline {figure}{\numberline {3-3}{\ignorespaces \lr {Hill-Climbing Algorithm on $N=20$}}}{13}{figure.3.3}%
+\contentsline {figure}{\numberline {3-4}{\ignorespaces \lr {Local Beam Search on $N=20$}}}{14}{figure.3.4}%
+\contentsline {figure}{\numberline {3-5}{\ignorespaces \lr {\% Worse than best answer}}}{15}{figure.3.5}%
+\addvspace {10\p@ }
+\contentsfinish 

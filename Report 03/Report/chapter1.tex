@@ -1,0 +1,411 @@
+\chapter{شرح مسئله و روند کار}
+
+\section{مقدمه}
+در این گزارش عملکرد الگوریتم‌های جستجوی محلی متفاوت (
+\lr{Annealing Search, Hill-Climbing search, Local beam search, Genetic algorithm}
+) را روی دو مسئله‌ی فروشنده‌ی دوره‌گرد(
+\lr{TSP}
+\LTRfootnote{\href{https://en.wikipedia.org/wiki/Travelling_salesman_problem}{Traveling Salesman problem}}
+)
+و  مسئله صدق‌پذیری دودویی )
+\lr{3-sat}
+\LTRfootnote{\href{https://en.wikipedia.org/wiki/Boolean_satisfiability_problem/}{Boolean Satisfiability Problem}}
+)
+ بررسی خواهیم کرد.
+ هردوی این مسائل 
+\lr{NP Complete}
+میباشند و این الگوریتم ها صرفا تخمینی از جواب خواهند بود.
+
+\section{کدها و خروجی‌های برنامه}
+تمام کد‌ها و خروجی‌ها (از جمله کد
+\verb;latex;
+)
+در
+\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2003/}{اینجا}
+قابل مشاهده می‌باشد.
+
+\chapter{توابع ابتدایی}
+\section{تولید گراف تصادفی}
+برای تولید گراف تصادفی از تابع زیر استفاده شده است.
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2003/code/generators/__init__.py}}
+در این تابع گرافی کامل با 
+\verb;nodes;
+راس تولید شده که هر یال آن عددی بین
+\verb;min_weight;
+و
+\verb;max_weight;
+می‌باشد.
+
+\begin{latin}
+\begin{python}
+def gen_weighted_graph(nodes=30, wei_min=1, wei_max=100):
+
+    graph = [[0 for j in range(nodes)] for i in range(nodes)]
+
+    for i in range(nodes):
+        for j in range(i):
+            wei = math.floor(random.random() * (wei_max - wei_min)) + wei_min
+            graph[i][j] = wei
+            graph[j][i] = wei
+    return graph
+
+\end{python}
+\end{latin}
+\section{تولید \lr{\ttfamily{3-SAT}} تصادفی}
+تابع 
+\verb;gen_sat;
+از بین تمام سه‌تای های
+$x, y, z \in \{x, \neg x | x \in \{x_1, x_2, ... x_n\}\}$
+هریک را به احتمال
+$p$
+انتخاب می‌کند.
+
+برای چک کردن همه‌ی این سه‌تای‌ها یک متغیر 
+$xi \in {-1, 1}$
+نگه میداریم که در صورت صفر بودن آن فرض میکنیم که در آن ستایی منظور عکس i بوده است.
+
+\begin{latin}
+\begin{python}
+def gen_sat(variables=20, p=0.2):
+    sat = []
+    
+    for i in range(variables):
+        for xi in range(-1, 2, 2):
+            for j in range(i + 1):
+                for xj in range(-1, 2, 2):
+                    for k in range(j + 1):
+                        for xk in range(-1, 2, 2):
+                                if random.random() < p:
+                                    clause = [xk * (k + 1), xj * (j + 1), xi * (i + 1)]
+                                    sat.append(tuple(clause))
+
+    return sat
+
+\end{python}
+\end{latin}
+ 
+ \section{تصویر سازی}
+ برای نمایش دادن نمودارهای برنامه از
+\verb;matplotlib;
+\LTRfootnote{\url{https://matplotlib.org/}}
+و
+\verb;seaborn;
+\LTRfootnote{\url{https://seaborn.pydata.org/}}
+ و برای گراف‌ها از
+\verb;networkx;
+\LTRfootnote{\url{https://networkx.org/documentation/stable/}}
+استفاده شده.
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/tree/main/Report\%2003/code/visualizers}}
+
+
+\section{نمایش \lr{\ttfamily{TSP}}}
+
+برای نمایش 
+\verb;TSP;
+از تابع زیر استفاده شده.
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/tree/main/Report\%2003/code/visualizers/GraphVisualizers.py}}
+
+\begin{latin}
+\begin{python}
+def visualize_tsp(graph, path=[], name="",
+        output=None):
+    plt.figure()
+    plt.title(name)
+    G = nx.Graph()
+    color_map = []
+    for i in range(len(graph)):
+        if i in path:
+            color_map.append("#66CC99")
+        else:
+            color_map.append("#112233")
+    G.add_nodes_from([i for i in range(len(graph))])
+    path_edges = [sorted((path[i - 1], path[i])) for i in range(len(path))]
+    print(path)
+    print(graph)
+    print(path_edges)
+    G.add_edges_from(
+            [
+                (i, j, {'weight':  graph[i][j], 
+                    'color': '#112233' if (i, j) not in path_edges else '#FC575E'})
+                for i in range(len(graph)) for j in range(len(graph[i])) if (i < j)
+            ]
+    )
+    G.add_edge(2, 5, weight=3)
+    for i in range(len(path)):
+        G.edges[path[i - 1], path[i]]['color'] = 'red'
+    #  G.add_edges_from(
+    #          [
+    #              (path[i - 1], path[i], {'weight': graph[path[i - 1]][path[i]]})
+    #              for i in range(len(path))
+
+    #          ],
+    #          color="#FC575E"
+    #  )
+    pos = nx.shell_layout(G)
+    edge_colors = nx.get_edge_attributes(G,'color').values()
+    nx.draw_networkx_edges(G, pos, alpha=0.4, edge_color=edge_colors)
+    nx.draw_networkx_nodes(G, pos, node_color=color_map, node_size=100)
+    labels = nx.get_edge_attributes(G,'weight')
+    nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
+    if output:
+        if not os.path.exists(os.path.dirname(os.path.join("./output", output, f"{name}.jpg"))):
+            try: os.makedirs(os.path.dirname(os.path.join("./output", output, f"{name}.jpg")))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        plt.savefig(os.path.join("./output", output, f"{name}.jpg"))
+        matplotlib.rcParams.update({
+            "pgf.texsystem": "pdflatex",
+            'font.family': 'mononoki Nerd Font Mono',
+            'text.usetex': True,
+            'pgf.rcfonts': False,
+        })
+        plt.savefig(os.path.join("./output", output, f"{name}.pgf"))
+    plt.show()
+
+
+
+\end{python}
+\end{latin}
+ 
+ 
+ 
+ 
+ 
+\chapter{پیاده‌سازی \lr{\ttfamily{TSP}}}
+برای پیاده سازی این الگوریتم در فایل
+\verb;LoadTSP.py;
+دو تابع
+\verb;load_samples;
+و
+\verb;run_tests;
+نوشته شده‌است.
+تابع
+\verb;load_samples;
+یک گراف تصادفی درست کرده و خروجی هر چهار الگوریتم را روی آن نمایش می‌دهد و تابع
+\verb;run_tests;
+خروجی الگوریتم‌‌ها را با افزایش
+$N$
+بررسی می‌کند.
+الگوریتم‌های پیاده شده در 
+\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2003/code/TSP/}{اینجا}
+قابل مشاهده هستند.
+
+\section{جواب بهینه}
+
+با توجه به سرعت پایین زبان
+\verb;python;
+برای پیداکردن جواب بهینه از
+\verb;C;
+استفاده‌شد.
+این الگوریتم در زمان
+$O(n^2 . 2^n)$
+و حافظه‌ی
+$O(n.2^n)$
+اجرا می‌شود.
+\footnote{\href{https://www.geeksforgeeks.org/travelling-salesman-problem-set-1/}{شرح الگوریتم}}
+\footnote{\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2003/code/tests/efficient_solvers/tsp.c}{کد}}
+برای اجرای این کد دستور زیر را اجرا کنید.
+
+
+\lr{\ttfamily{./build tsp}}
+
+\section{تخمین ارزش}
+در پیاده‌سازی هر چهار الگوریتم، برای تخمین، نیاز به ماکسیمایز کردن یک تابع داریم. از آنجایی که هدف 
+\verb;TSP;
+حداقل سازی طول مسیر است، تابع مورد نظرمان را تفاضل مجموع یال‌ها و طول مسیر قرار دادیم.
+
+\section{همسایگی}
+دو دور را همسایه می‌گوییم اگر  یکی با جابجا کردن دو عضو متوالی به دیگری تبدیل شود.
+
+\section{\lr{\ttfamily{Local Beam Search}}}
+در این تابع تعداد نمونه‌ها 
+$10$
+و  حداکثر تکرار‌ها برای تست‌ها
+$1000$
+و برای نمونه‌ها
+$10000$
+قرار داده شده.
+\section{\lr{\ttfamily{Annealing Search}}}
+در این تابع 
+تغییرات دما به فرم 
+$T_{next}=0.98 T_{now}$
+با حداقل دمای  $0.000001$ و دمای اولیه 1 ثبت شده‌اند.
+در تست‌ها حداقل دما 
+$0.001$
+قرار داده شده.
+
+\section{الگوریتم ژنتیکی}
+در این الگوریتم سایز جمعیت ده و احتمال
+\verb;Mutation;
+برابر
+$0.05$
+قرار داده‌شده.
+حداکثر تکرارها برای تست‌ها 
+$1000$
+و برای نمونه‌ها
+$10000$
+می‌باشد.
+
+
+\subsection{تولید مثل}
+برای تولید بچه‌ی دو مسیر، یک بازه‌ی متوالی از پدر را انتخاب کرده و رئوسی که نیامده‌اند را به‌ترتیب حضورشان در مادر قرار می‌دهیم.
+
+\begin{latin}
+\begin{python}
+    def crossover(parent0, parent1):
+        start, end = random.randrange(len(graph)), random.randrange(len(graph))
+        if start > end:
+            start, end = end, start
+        child = [None] * len(graph)
+        for i in range(start, end + 1):
+            child[i] = parent0[i]
+        ptr = 0
+        for i in range(len(graph)):
+            if child[i] != None:
+                continue
+            while parent1[ptr] in child:
+                ptr += 1
+            child[i] = parent1[ptr]
+        return child
+
+\end{python}
+\end{latin}
+
+\subsection{\lr{\ttfamily{Mutation}}}
+\verb;Mutation;
+را حاصل جابجای دو عضو متوالی تعریف می‌کنیم.
+
+\begin{latin}
+\begin{python}
+     def mutate(cell):
+        ind = random.randrange(len(graph))
+        cell[ind], cell[ind - 1] = cell[ind - 1], cell[ind]
+        return cell
+
+\end{python}
+\end{latin}
+
+\section{خروجی‌های نمونه}
+\insertfig{figures/Simulated Annealing Search.pgf}{\lr{Simulated Annealing on $N=20$}}{ANS_S_02_20}
+\insertfig{figures/Genetic Algorithm.pgf}{\lr{Genetic Algorithm on $N=20$}}{ANS_S_02_20}
+\insertfig{figures/Hill-Climbing.pgf}{\lr{Hill-Climbing Algorithm on $N=20$}}{ANS_S_02_20}
+\insertfig{figures/Local Beam Search.pgf}{\lr{Local Beam Search on $N=20$}}{ANS_S_02_20}
+
+
+\section{مقایسه‌ی نتایج}
+
+\insertfig{figures/worse than best answer.pgf}{\lr{\% Worse than best answer}}{ANS_S_02_20}
+
+به‌طور میانگین
+\verb;Simulated Annealing Search;
+بهترین نتیجه را داشت ولی در کل تفاوت چندانی بین الگوریتم‌ها نبود.
+به لحاظ زمان همه تا حداکثر تعداد تکرار ها پیش می‌رفتند.
+
+\chapter{پیاده‌سازی \lr{\ttfamily{3-SAT}}}
+در اینجا
+از آنجایی که هر مسئله‌ی
+\verb;SAT;
+می‌تواند به یک
+\verb;3-SAT;
+تبدیل‌شود،
+\LTRfootnote{\url{https://en.wikipedia.org/wiki/Boolean_satisfiability_problem\#3-satisfiability}}
+ صرفا مسئله‌ی
+\verb;3-SAT;
+بررسی می‌شود.
+کد الگوریتم‌های این بخش در 
+\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2003/code/SAT/}{اینجا}
+قابل دسترسی است.
+
+در فایل
+\verb;LoadSAT.py;
+تابع 
+\verb;load_samples;
+نوشته شده که خروجی‌های الگوریتم‌ها را برای یک مسئله‌ی
+\verb;SAT;
+تصادفی محاسبه می‌کند.
+
+
+
+\section{تخمین ارزش}
+برای تخمین ارزش یک جواب، در هر چهار الگوریتم، از تعداد جملات صحیح در
+\verb;SAT;
+استفاده شده است.
+
+\section{همسایگی}
+دو موقعییت همسایه‌اند، اگر تنها یک متغییر در آنها مقدار متفاوتی داشته باشد.
+
+\section{\lr{\ttfamily{Local Beam Search}}}
+در این تابع تعداد نمونه‌ها 
+$10$
+و  حداکثر تکرار‌ها برای تست‌ها
+$1000$
+و برای نمونه‌ها
+$10000$
+قرار داده شده.
+\section{\lr{\ttfamily{Annealing Search}}}
+در این تابع 
+تغییرات دما به فرم 
+$T_{next}=0.98 T_{now}$
+با حداقل دمای  $0.000001$ و دمای اولیه 1 ثبت شده‌اند.
+در تست‌ها حداقل دما 
+$0.001$
+قرار داده شده.
+
+\section{الگوریتم ژنتیکی}
+در این الگوریتم سایز جمعیت ده و احتمال
+\verb;Mutation;
+برابر
+$0.05$
+قرار داده‌شده.
+حداکثر تکرارها برای تست‌ها 
+$1000$
+و برای نمونه‌ها
+$10000$
+می‌باشد.
+
+
+\subsection{تولید مثل}
+در تولید مثل، از یک
+\verb;prefix;
+مادر و 
+\verb;suffix;
+معادل آن در پدر استفاده می‌کنیم.
+
+\begin{latin}
+\begin{python}
+    def crossover(parent0, parent1):
+        start, end = random.randrange(n), random.randrange(n)
+        if start > end:
+            start, end = end, start
+        child = [None] * n
+        for i in range(start, end + 1):
+            child[i] = parent0[i]
+        ptr = 0
+        for i in range(start):
+            child[i] = parent1[ptr]
+        for i in range(end + 1, n):
+            child[i] = parent1[ptr]
+        return child
+
+
+\end{python}
+\end{latin}
+
+\subsection{\lr{\ttfamily{Mutation}}}
+\verb;Mutation;
+را حاصل عوض کردن یک متغییر تعریف می‌کنیم.
+
+\begin{latin}
+\begin{python}
+    def mutate(cell):
+        ncell = list(cell)
+        i = random.randrange(n)
+        ncell[i] = not ncell[i]
+        return ncell
+
+
+\end{python}
+\end{latin}
+
+
