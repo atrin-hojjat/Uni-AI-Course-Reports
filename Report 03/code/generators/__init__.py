@@ -1,7 +1,7 @@
 import random
 import math
 
-def gen_weighted_graph(nodes=30, wei_min=1, wei_max=100):
+def gen_weighted_graph(nodes=20, wei_min=1, wei_max=100):
 
     graph = [[0 for j in range(nodes)] for i in range(nodes)]
 
@@ -16,14 +16,14 @@ def gen_sat(variables=20, p=0.2):
     sat = []
     
     for i in range(variables):
-        for j in range(i + 1):
-            for k in range(j + 1):
-                if random.random() < p:
-                    clause = [k + 1, j + 1, i + 1]
-                    for t in range(3):
-                        if random.random() < 0.5:
-                            clause[t] = -clause[t]
-                    sat.append(tuple(clause))
+        for xi in range(-1, 2, 2):
+            for j in range(i + 1):
+                for xj in range(-1, 2, 2):
+                    for k in range(j + 1):
+                        for xk in range(-1, 2, 2):
+                                if random.random() < p:
+                                    clause = [xk * (k + 1), xj * (j + 1), xi * (i + 1)]
+                                    sat.append(tuple(clause))
 
     return sat
 
