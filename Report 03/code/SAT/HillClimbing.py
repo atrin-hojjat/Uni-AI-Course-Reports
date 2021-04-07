@@ -5,8 +5,11 @@ def hill_climbing(n, sat, rand_start=0):
     def evaluate(state):
         cnt = 0
         for i in sat:
-            for t in state:
-                if state[t] == 1:
+            for t in i:
+                if t > 0 and state[t - 1] == 1:
+                    cnt += 1
+                    break
+                elif t < 0 and state[-t - 1] == 0:
                     cnt += 1
                     break
         return cnt

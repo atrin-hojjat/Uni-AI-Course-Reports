@@ -1,12 +1,15 @@
 import numpy as np
 import random
 
-def local_beam_search(n, sat, k=10, max_iters=10000):
+def local_beam_search(n, sat, k=10, max_iters=1000):
     def evaluate(state):
         cnt = 0
         for i in sat:
-            for t in state:
-                if state[t] == 1:
+            for t in i:
+                if t > 0 and state[t - 1] == 1:
+                    cnt += 1
+                    break
+                elif t < 0 and state[-t - 1] == 0:
                     cnt += 1
                     break
         return cnt

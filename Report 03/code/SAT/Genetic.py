@@ -6,23 +6,26 @@ def genetic_algorithm(n, sat, max_iters=10000, fitness_threshold=0.01, populatio
     def fitness(state):
         cnt = 0
         for i in sat:
-            for t in state:
-                if state[t] == 1:
+            for t in i:
+                if t > 0 and state[t - 1] == 1:
+                    cnt += 1
+                    break
+                elif t < 0 and state[-t - 1] == 0:
                     cnt += 1
                     break
         return cnt
 
     def mutate(cell):
         ncell = list(cell)
-        i = random.randrange(len(n))
+        i = random.randrange(n)
         ncell[i] = not ncell[i]
         return ncell
 
     def crossover(parent0, parent1):
-        start, end = random.randrange(len(n)), random.randrange(len(n))
+        start, end = random.randrange(n), random.randrange(n)
         if start > end:
             start, end = end, start
-        child = [None] * len(n)
+        child = [None] * n
         for i in range(start, end + 1):
             child[i] = parent0[i]
         ptr = 0
@@ -44,7 +47,7 @@ def genetic_algorithm(n, sat, max_iters=10000, fitness_threshold=0.01, populatio
     for i in range(population_size):
         new = None
         while new is None or new in initial_population:
-            new = list(np.random.permutation(len(n)))
+            new = [(random.random() < 0.5) for j in range(n)]
         initial_population.append((fitness(new), new))
     population = initial_population
 
