@@ -1,7 +1,7 @@
 import random
 import math
 
-def gen_weighted_graph(nodes=30, wei_min=0, wei_max=100):
+def gen_weighted_graph(nodes=30, wei_min=1, wei_max=100):
 
     graph = [[0 for j in range(nodes)] for i in range(nodes)]
 
