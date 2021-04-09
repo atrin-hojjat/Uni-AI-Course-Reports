@@ -1,5 +1,8 @@
 # Report 03: Implementing Local Search algorithms on TSP and 3-SAT
 
+## Report
+[PDF](./Report/AUTthesis.pdf) and Latex files for the Report can be found [here](./Report/).
+
 ## Algorithms Implemented
 
 - Hill-climbing search
