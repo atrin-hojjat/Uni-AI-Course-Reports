@@ -1,7 +1,7 @@
 \edef \SavedTocDepth {\the \value {tocdepth}}
 \setcounter {tocdepth}{-10}
-\contentsline {chapter}{فهرست اشکال}{ج}{section*.3}%
-\contentsline {chapter}{فهرست جداول}{د}{section*.4}%
+\contentsline {chapter}{فهرست اشکال}{د}{section*.3}%
+\contentsline {chapter}{فهرست جداول}{ه}{section*.4}%
 \par عنوان\hfill صفحه \par 
 \setcounter {tocdepth}{\SavedTocDepth }
 \contentsline {chapter}{\numberline {1}شرح مسئله و روند کار}{1}{chapter.1}%
@@ -31,6 +31,7 @@
 \contentsline {section}{\numberline {4-5}الگوریتم ژنتیکی}{17}{section.4.5}%
 \contentsline {subsection}{\numberline {4-5-1}تولید مثل}{18}{subsection.4.5.1}%
 \contentsline {subsection}{\numberline {4-5-2}\lr {\ttfamily {Mutation}}}{18}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4-6}مقایسه‌ی نتایج}{18}{section.4.6}%
 \contentsline {chapter}{منابع و مراجع}{19}{appendix*.5}%
 \contentsline {chapter}{پیوست}{20}{appendix*.6}%
 \contentsfinish 
