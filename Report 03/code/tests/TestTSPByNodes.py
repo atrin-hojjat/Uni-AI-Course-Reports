@@ -19,10 +19,10 @@ def best_answer(graph):
     if graph == graph_prv:
         return answer_prv
     graph_prv = graph
-    _p = ndpointer(dtype=np.int, ndim=2, shape=(len(graph), len(graph)), flags='C')
+    _p = ndpointer(dtype=np.int32, ndim=2, shape=(len(graph), len(graph)), flags='C')
 
     tspDll.solve.argtypes = [ctypes.c_int, _p]
-    answer_prv = tspDll.solve(len(graph), np.array(graph, dtype=np.int,))
+    answer_prv = tspDll.solve(len(graph), np.array(graph, dtype=np.int32,))
     return answer_prv
 
 tot_edges_prv = None
