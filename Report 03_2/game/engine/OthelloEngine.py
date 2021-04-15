@@ -175,7 +175,7 @@ class OthelloEngine(Engine.AbstractEngine):
             elif self.state['board'][ix, iy] == PLAYERS.BLACK:
                 blackScore = blackScore + 1
         self.state['score']['black'], self.state['score']['white'] = blackScore, whiteScore
-        if not ongoing:
+        if not ongoing or blackScore == 0 or whiteScore == 0:
             self.state['gameEnded'] = True
 
         if ongoing and len(t) == 0:
