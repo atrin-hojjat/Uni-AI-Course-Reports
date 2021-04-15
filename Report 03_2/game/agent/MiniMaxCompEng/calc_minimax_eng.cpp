@@ -250,10 +250,10 @@ void undoMoves(const int N, int **grid, int player, unsigned long long int desHa
 
 PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash, 
 		int remDepth, int curPlayer, int player, PreCalcData curBestChoice = {0, 0, {-1, -1}}) {
-	// if(preCalc[player].find(curHash) != preCalc[player].end()) {
-	//   if(preCalc[player][curHash].depth >= remDepth)
-	//     return preCalc[player][curHash];
-	// }
+	if(preCalc[player].find(curHash) != preCalc[player].end()) {
+		if(preCalc[player][curHash].depth >= remDepth)
+			return preCalc[player][curHash];
+	}
 	if(remDepth == 0) {
 		return preCalc[player][curHash] = {evaluate(N, grid, player), 0, {-1, -1}};
 	}
@@ -292,15 +292,15 @@ PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash,
 				bestAnswer.value = val.value;
 				bestAnswer.bestMove = mv;
 			}
-			// if(~curBestChoice.bestMove.first && val.value > curBestChoice.value) [> alpha-beta pruning <]
-			//   return {val.value, remDepth, mv};
+			if(~curBestChoice.bestMove.first && val.value > curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
 		} else {
 			if(val.value < bestAnswer.value) {
 				bestAnswer.value = val.value;
 				bestAnswer.bestMove = mv;
 			}
-			// if(~curBestChoice.bestMove.first && val.value < curBestChoice.value) [> alpha-beta pruning <]
-			//   return {val.value, remDepth, mv};
+			if(~curBestChoice.bestMove.first && val.value < curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
 		}
 
 	}
