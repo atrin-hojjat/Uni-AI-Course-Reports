@@ -92,6 +92,7 @@ class OthelloEngine(Engine.AbstractEngine):
                                 ok = k > 1
                                 break
                         if ok: break
+                    if ok: break
                 if ok:
                     availableMoves.append((i, j))
                     continue
