@@ -39,8 +39,10 @@ class Game:
                 else:
                     moveNo = self.blackAgent.move(self.engine)
                 self.engine.makeMove(self.engine.getAvailableMoves()[moveNo])
+                rich.print(self.engine.state)
                 console.clear()
                 live.update(self.drawTable())
+        rich.print(self.engine.state)
 
 
                 
