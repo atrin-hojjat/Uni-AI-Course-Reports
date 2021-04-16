@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2020)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: AUTthesis.aux
+A level-1 auxiliary file: chapter1.aux
+The style file: plain-fa.bst
+A level-1 auxiliary file: appendix1.aux
+Database file #1: references.bib
+-- plain-fa.bst version 0.9 (2015/05/09) 
+-- This is a BibTeX style for XePersian: http://www.parsilatex.com
+
+Done.
+You've used 1 entry,
+            2546 wiz_defined-function locations,
+            632 strings with 5403 characters,
+and the built_in function-call counts, 404 in all, are:
+= -- 35
+> -- 13
+< -- 0
++ -- 5
+- -- 4
+* -- 39
+:= -- 64
+add.period$ -- 3
+call.type$ -- 1
+change.case$ -- 5
+chr.to.int$ -- 0
+cite$ -- 1
+duplicate$ -- 11
+empty$ -- 28
+format.name$ -- 4
+if$ -- 85
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 8
+newline$ -- 15
+num.names$ -- 2
+pop$ -- 3
+preamble$ -- 1
+purify$ -- 4
+quote$ -- 0
+skip$ -- 8
+stack$ -- 0
+substring$ -- 30
+swap$ -- 1
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 4
+type$ -- 4
+warning$ -- 0
+while$ -- 4
+width$ -- 2
+write$ -- 19
