@@ -45,7 +45,7 @@ const int MaxN = 20;
 const int inf = 1e9 + 7;
 const int STATES = 3;
 unsigned long long int zobristTable[MaxN][MaxN][STATES];
-map<unsigned long long int, PreCalcData> preCalc[STATES];
+map<unsigned long long int, PreCalcData> preCalc[STATES][STATES];
 stack<ChangedSegment> moves = stack<ChangedSegment>();
 mt19937 mt_rand;
 
@@ -250,12 +250,12 @@ void undoMoves(const int N, int **grid, int player, unsigned long long int desHa
 
 PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash, 
 		int remDepth, int curPlayer, int player, PreCalcData curBestChoice = {0, 0, {-1, -1}}) {
-	if(preCalc[player].find(curHash) != preCalc[player].end()) {
-		if(preCalc[player][curHash].depth >= remDepth)
-			return preCalc[player][curHash];
+	if(preCalc[player][curPlayer].find(curHash) != preCalc[player][curPlayer].end()) {
+		if(preCalc[player][curPlayer][curHash].depth >= remDepth)
+			return preCalc[player][curPlayer][curHash];
 	}
 	if(remDepth == 0) {
-		return preCalc[player][curHash] = {evaluate(N, grid, player), 0, {-1, -1}};
+		return preCalc[player][curPlayer][curHash] = {evaluate(N, grid, player), 0, {-1, -1}};
 	}
 	auto posmoves = getPossibleMoves(N, grid, player);
 
@@ -269,9 +269,9 @@ PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash,
 				}
 
 		if(boardFull)
-			return preCalc[player][curHash] = {evaluate(N, grid, player), inf, {-1, -1}};
+			return preCalc[player][curPlayer][curHash] = {evaluate(N, grid, player), inf, {-1, -1}};
 		else
-			return preCalc[player][curHash] = {MiniMax(N, grid, curHash, remDepth - 1, 
+			return preCalc[player][curPlayer][curHash] = {MiniMax(N, grid, curHash, remDepth - 1, 
 					curPlayer ^ 3, player).value, remDepth, {-1, -1}};
 	}
 
@@ -304,13 +304,14 @@ PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash,
 		}
 
 	}
-	return preCalc[player][curHash] = bestAnswer;
+	return preCalc[player][curPlayer][curHash] = bestAnswer;
 }
 
 
 void setup(int N) {
 	for(int i = 0; i < STATES; i++)
-		preCalc[i] = map<unsigned long long int, PreCalcData>();
+		for(int j = 0; j < STATES; j++)
+			preCalc[i][j] = map<unsigned long long int, PreCalcData>();
 	moves = stack<ChangedSegment>();
 
 	mt_rand = mt19937(time(0));
@@ -329,7 +330,8 @@ EXPORT int calc(int N, int grid[N][N], int player,
 		ngrid[i] = new int[N];
 	setup(N);
 	for(int i = 0; i < STATES; i++)
-		preCalc[i] = map<unsigned long long int, PreCalcData>();
+		for(int j = 0; j < STATES; j++)
+			preCalc[i][j] = map<unsigned long long int, PreCalcData>();
 	moves = stack<ChangedSegment>();
 	for(int i = 0; i < N; i++)
 		for(int j = 0; j < N; j++)
@@ -368,7 +370,8 @@ static PyObject* calculateMiniMax(PyObject* self, PyObject* args) { /* WIP */
 		ngrid[i] = new int[N];
 	setup(N);
 	for(int i = 0; i < STATES; i++)
-		preCalc[i] = map<unsigned long long int, PreCalcData>();
+		for(int j = 0; j < STATES; j++)
+			preCalc[i][j] = map<unsigned long long int, PreCalcData>();
 	moves = stack<ChangedSegment>();
 	for(int i = 0; i < N; i++)
 		for(int j = 0; j < N; j++)
