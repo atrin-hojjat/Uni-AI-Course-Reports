@@ -1,7 +1,7 @@
 \edef \SavedTocDepth {\the \value {tocdepth}}
 \setcounter {tocdepth}{-10}
-\contentsline {chapter}{فهرست اشکال}{د}{section*.3}%
-\contentsline {chapter}{فهرست جداول}{ه}{section*.4}%
+\contentsline {chapter}{فهرست اشکال}{ج}{section*.3}%
+\contentsline {chapter}{فهرست جداول}{د}{section*.4}%
 \par عنوان\hfill صفحه \par 
 \setcounter {tocdepth}{\SavedTocDepth }
 \contentsline {chapter}{\numberline {1}شرح مسئله و روند کار}{1}{chapter.1}%
