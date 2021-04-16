@@ -478,7 +478,6 @@ AGENTS = [
         ("MiniMax agent(depth 12 - up to 100 seconds)", lambda col: MiniMax.MiniMaxAgent(color=col,
             depth=12)),
         ]
-
 \end{python}
 \end{latin}
 
@@ -514,7 +513,6 @@ AGENTS = [
 unsigned long long int zobristTable[MaxN][MaxN][STATES];
 ...
 
-
 void generateZobristValues(int N) {
 	for(int i = 0; i < N; i++)
 		for(int j = 0; j < N; j++)
@@ -529,7 +527,6 @@ unsigned long long int generateHash(const int N, int **grid) {
 			val ^= zobristTable[i][j][grid[i][j]];
 	return val;
 }
-
 \end{lstlisting}
 \end{latin}
 
@@ -676,7 +673,6 @@ unsigned long long int makeMove(const int N, int **grid, int player,
 	}
 	return newHash;
 }
-
 \end{lstlisting}
 \end{latin}
 
@@ -716,8 +712,7 @@ struct PreCalcData {
 };
 ...
 
-map<unsigned long long int, PreCalcData> preCalc[STATES];
-
+map<unsigned long long int, PreCalcData> preCalc[STATES][STATES];
 \end{lstlisting}
 \end{latin}
 
@@ -727,12 +722,10 @@ map<unsigned long long int, PreCalcData> preCalc[STATES];
 
 \begin{latin}
 \begin{lstlisting}
-	if(preCalc[player].find(curHash) != preCalc[player].end()) {
-		if(preCalc[player][curHash].depth >= remDepth)
-			return preCalc[player][curHash];
+	if(preCalc[player][curPlayer].find(curHash) != preCalc[player][curPlayer].end()) {
+		if(preCalc[player][curPlayer][curHash].depth >= remDepth)
+			return preCalc[player][curPlayer][curHash];
 	}
-
-
 \end{lstlisting}
 \end{latin}
 
@@ -775,7 +768,65 @@ map<unsigned long long int, PreCalcData> preCalc[STATES];
  
  \begin{latin}
  \begin{lstlisting}
- 
+ PreCalcData MiniMax(const int N, int **grid, unsigned long long int curHash, 
+		int remDepth, int curPlayer, int player, PreCalcData curBestChoice = {0, 0, {-1, -1}}) {
+	if(preCalc[player][curPlayer].find(curHash) != preCalc[player][curPlayer].end()) {
+		if(preCalc[player][curPlayer][curHash].depth >= remDepth)
+			return preCalc[player][curPlayer][curHash];
+	}
+	if(remDepth == 0) {
+		return preCalc[player][curPlayer][curHash] = {evaluate(N, grid, player), 0, {-1, -1}};
+	}
+	auto posmoves = getPossibleMoves(N, grid, player);
+
+	if(posmoves.size() == 0) {
+		bool boardFull = true;
+		for(int i = 0; i < N && boardFull; i++)
+			for(int j = 0; j < N; j++)
+				if(grid[i][j] == 0) {
+					boardFull = false;
+					break;
+				}
+
+		if(boardFull)
+			return preCalc[player][curPlayer][curHash] = {evaluate(N, grid, player), inf, {-1, -1}};
+		else
+			return preCalc[player][curPlayer][curHash] = {MiniMax(N, grid, curHash, remDepth - 1, 
+					curPlayer ^ 3, player).value, remDepth, {-1, -1}};
+	}
+
+	PreCalcData bestAnswer = {(__builtin_popcount(player ^ curPlayer) - 1) * inf, 
+		remDepth, {-1, -1}};
+
+
+	for(auto mv : posmoves) {
+		unsigned long long int newHash = makeMove(N, grid, player, mv, curHash);
+
+		PreCalcData val;
+		val = MiniMax(N, grid, newHash, remDepth - 1, curPlayer ^ 3, player, bestAnswer);
+
+		undoMoves(N, grid, curPlayer, curHash);
+
+		if(curPlayer == player) {
+			if(val.value > bestAnswer.value) {
+				bestAnswer.value = val.value;
+				bestAnswer.bestMove = mv;
+			}
+			if(~curBestChoice.bestMove.first && val.value > curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
+		} else {
+			if(val.value < bestAnswer.value) {
+				bestAnswer.value = val.value;
+				bestAnswer.bestMove = mv;
+			}
+			if(~curBestChoice.bestMove.first && val.value < curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
+		}
+
+	}
+	return preCalc[player][curPlayer][curHash] = bestAnswer;
+}
+
  \end{lstlisting}
  \end{latin}
  
@@ -828,7 +879,8 @@ map<unsigned long long int, PreCalcData> preCalc[STATES];
 		ngrid[i] = new int[N];
 	setup(N);
 	for(int i = 0; i < STATES; i++)
-		preCalc[i] = map<unsigned long long int, PreCalcData>();
+		for(int j = 0; j < STATES; j++)
+			preCalc[i][j] = map<unsigned long long int, PreCalcData>();
 	moves = stack<ChangedSegment>();
 	for(int i = 0; i < N; i++)
 		for(int j = 0; j < N; j++)
@@ -860,7 +912,6 @@ map<unsigned long long int, PreCalcData> preCalc[STATES];
 
 	return ret;
 }
-
  \end{lstlisting}
  \end{latin}
  
@@ -916,7 +967,6 @@ int main(int argc, char *argv[]) {
 	PyMem_RawFree(program);
 	return 0;
 }
-
  \end{lstlisting}
  \end{latin}
  
