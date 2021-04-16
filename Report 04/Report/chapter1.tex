@@ -484,4 +484,471 @@ AGENTS = [
 
 
 \chapter{پیاده‌سازی الگوریتم \lr{\ttfamily{Minimax}}}
+به دلیل محدودیت سرعت پایتون، برای پیاده‌سازی الگوریتم
+\lr{\ttfamily{MiniMax}}
+\LTRfootnote{\url{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2004/game/agent/MiniMaxCompEng/calc_minimax_eng.cpp}}
+از 
+\lr{\ttfamily{C++}}
+استفاده شد.
+الگوریتم با 
+\lr{\ttfamily{Alpha-Beta Pruning}}
+و
+\lr{\ttfamily{Cutoff}}
+پیاده‌سازی شده
+و از 
+\lr{\ttfamily{Zobrist Hashing}}
+برای پیش‌گیری از محاسبه دوباره استفاده شده.
+
+برای بررسی امتیاز یک موقعییت از اختلاف تعداد مهره‌های هر بازیکن استفاده‌شده.
+
+\section{\lr{\ttfamily{Zobrist Hashing}}}
+در پیاده سازی 
+\lr{\ttfamily{Zobrist Hashing}}
+از
+\href{https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/}{این مقاله}
+استفاده شده.
+
+\lstset{language=C++}
+\begin{latin}
+\begin{lstlisting}
+unsigned long long int zobristTable[MaxN][MaxN][STATES];
+...
+
+
+void generateZobristValues(int N) {
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < N; j++)
+			for(int s = 0; s < STATES; s++)
+				zobristTable[i][j][s] = randomGenerator();
+}
+
+unsigned long long int generateHash(const int N, int **grid) {
+	unsigned long long int val = 0;
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < N; j++)
+			val ^= zobristTable[i][j][grid[i][j]];
+	return val;
+}
+
+\end{lstlisting}
+\end{latin}
+
+به‌علاوه با تغییر هر خانه‌ی جدول به شکل زیر می‌توان هش جدید را به‌دست آورد.
+
+\begin{latin}
+\begin{lstlisting}
+newHash ^= zobristTable[ip][jp][prvColor] ^ 
+		zobristTable[ip][jp][curColor];
+
+\end{lstlisting}
+\end{latin}
+
+\section{تغییر جدول پس از هر حرکت}
+برای بررسی حالت جدول در صورتی که یک حرکت خواص انجام شود، می‌توان هر دفعه کپی جدیدی از جدول درست کرد و به تابع فرستاد. اما در این پیاده‌سازی از آنجایی که حدف
+\verb;Multithreading;
+نداشتیم، در هر مرحله حرکت را روی جدول پیاده کردیم و پس از بررسی آن حالت جرول را به فرم قبلی باز گرداندیم.
+به این منظور یک پشته
+\LTRfootnote{stack}
+از تغییرات نگه می‌داریم و  در حین انجام هر حرکت، تغییرات را به این پشته اضافه می‌کنیم.
+هر تغییر را به شکل زیر نشان می‌دهیم:
+
+\begin{latin}
+\begin{lstlisting}
+struct ChangedSegment {
+	int k, is, js, idir, jdir;
+	unsigned long long int prvHash;
+	int prvColor, curColor;
+};
+\end{lstlisting}
+\end{latin}
+
+که نشان می‌دهد بازه‌ی
+$(is + idir, js + jdir)$
+تا
+$(is + k * idir, js + k * jdir)$
+از
+\verb;prvColor;
+به
+\verb;curColor;
+تغییر کرده‌اند.
+\verb;prvHash;
+نشان دهنده‌ی هش جدول پیش از شروع تغییرات است.
+
+در تابع 
+\verb;makeMove;
+ابتدا در هر هشت جحت تمام تغییرات ممکن بررسی می‌شود سپس در یک 
+\verb;for;
+تمام آنها به پشته اضافه و در جدول اعمال می‌شوند.
+
+\begin{latin}
+\begin{lstlisting}
+stack<ChangedSegment> moves = stack<ChangedSegment>();
+...
+
+unsigned long long int makeMove(const int N, int **grid, int player, 
+		pair<int, int> selectedMove, unsigned long long int curHash) {
+	int i = selectedMove.first, j = selectedMove.second;
+	if(!~i || !~j || i < 0 || i >= N || j < 0 || j >= N)
+		return curHash;
+	if(grid[i][j] != 0) {
+		cout << i << " " << j << endl;
+		cout << grid[i][j] << endl;
+		cout << "FATAL ERROR WRONG START" << endl;
+		exit(-1);
+	}
+	vector<ChangedSegment> changes;
+
+	changes.push_back({1, i, j, 0, 0, curHash, 0, player});
+
+
+	for(int dir = -1; dir < 2; dir += 2) {
+		for(int jp = j + dir; jp > -1 && jp < N; jp += dir) {
+			if(grid[i][jp] == 0) 
+				break;
+			if(grid[i][jp] == player) {
+				if(abs(jp - j) > 1) {
+					ChangedSegment chngd;
+					if(jp < j) 
+						chngd = {abs(jp - j) - 1, i, j, 0, -1, curHash, 3 ^ player, player};
+					else
+						chngd = {abs(jp - j) - 1, i, j, 0, 1, curHash, 3 ^ player, player};
+					changes.push_back(chngd);
+				}
+				break;
+			}
+		}
+		for(int ip = i + dir; ip > -1 && ip < N; ip += dir) {
+			if(grid[ip][j] == 0) 
+				break;
+			if(grid[ip][j] == player) {
+				if(abs(ip - i) > 1) {
+					ChangedSegment chngd;
+					if(i < ip)
+						chngd = {abs(ip - i) - 1, i, j, 1, 0, curHash, 3 ^ player, player};
+					else
+						chngd = {abs(ip - i) - 1, i, j, -1, 0, curHash, 3 ^ player, player};
+					changes.push_back(chngd);
+				}
+				break;
+			}
+		}
+	}
+	for(int id = -1; id < 2; id += 2) 
+		for(int jd = -1; jd < 2; jd += 2) 
+			for(int k = 1; k < N; k++) {
+				if(i + id * k < 0 || i + id * k >= N)
+					break;
+				if(j + jd * k < 0 || j + jd * k >= N)
+					break;
+
+				int ip = i + id * k;
+				int jp = j + jd * k;
+
+				if(grid[ip][jp] == 0)
+					break;
+				if(grid[ip][jp] == player) {
+					if(k > 1) {
+						ChangedSegment chngd = {k - 1, i, j, id, jd, curHash, 3 ^ player, player};
+						changes.push_back(chngd);
+					}
+					break;
+				}
+			}
+
+	unsigned long long int newHash = curHash;
+	
+	for(auto change : changes) {
+		moves.push(change);
+		// int dist = max(abs(change.ie - change.is), abs(change.je - change.js));
+		for(int k = 1; k <= change.k; k++) {
+			int ip = change.is + k * change.idir;
+			int jp = change.js + k * change.jdir;
+			if(ip >= N || ip < 0 || jp >= N || jp < 0) {
+
+				cout << "FATAL ERROR " << change.k << " " << change.is << " " << change.js << " - " << ip << " " << jp << endl;
+				exit(-1);
+			}
+
+			newHash ^= zobristTable[ip][jp][change.prvColor] ^ 
+				zobristTable[ip][jp][change.curColor];
+			grid[ip][jp] = change.curColor;
+		}
+	}
+	return newHash;
+}
+
+\end{lstlisting}
+\end{latin}
+
+برای باز گرداندن حرکات از تابع
+\verb;undoMove;
+استفاده می‌شود که جدول را به حالتی باز می‌گرداند که هش آن
+\verb;desHash;
+باشد.
+
+\begin{latin}
+\begin{lstlisting}
+void undoMoves(const int N, int **grid, int player, unsigned long long int desHash) {
+	while(moves.size() && moves.top().prvHash == desHash) {
+		auto change = moves.top();
+		moves.pop();
+		
+		// int dist = max(abs(change.ie - change.is), abs(change.je - change.js));
+		for(int k = 1; k <= change.k; k++) {
+			int ip = change.is + k * change.idir;
+			int jp = change.js + k * change.jdir;
+
+			grid[ip][jp] = change.prvColor;
+		}
+	}
+}
+\end{lstlisting}
+\end{latin}
+
+
+\section{نگه‌داری موقعییت‌ها‌ی دیده شده}
+برای هر موقعییت دیده شده، بهترین نتیجه‌ی حاصل از آن به همراه عمق بررسی و بهترین حرکت نگه داشته می‌شود.
+\begin{latin}
+\begin{lstlisting}
+struct PreCalcData {
+	int value, depth;
+	pair<int, int> bestMove;
+};
+...
+
+map<unsigned long long int, PreCalcData> preCalc[STATES];
+
+\end{lstlisting}
+\end{latin}
+
+پس از بررسی هر موقعییت نتیجه‌ی آن در
+\verb;preCalc;
+ذخیره می‌شود و در حین بررسی هر موقعییت، اول چک می‌شود که آیا این موقعییت قبلا دیده شده یا نه و اگر دیده شده، آیا عمق آن کافی است.
+
+\begin{latin}
+\begin{lstlisting}
+	if(preCalc[player].find(curHash) != preCalc[player].end()) {
+		if(preCalc[player][curHash].depth >= remDepth)
+			return preCalc[player][curHash];
+	}
+
+
+\end{lstlisting}
+\end{latin}
+
+\section{\lr{\ttfamily{Alpha-Beta Pruning}}}
+برای پیاده سازی
+\lr{\ttfamily{Alpha-Beta Pruning}}
+پس از بررسی هر بچه در یک موقعییت، مقدار آن بچه با بهترین جواب پدر مقایسه شده.
+
+\begin{latin}
+\begin{lstlisting}
+		if(curPlayer == player) {
+			...
+			if(~curBestChoice.bestMove.first && val.value > curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
+		} else {
+			...
+			if(~curBestChoice.bestMove.first && val.value < curBestChoice.value) /* alpha-beta pruning */
+				return {val.value, remDepth, mv};
+		}
+
+\end{lstlisting}
+\end{latin}
+
+\section{الگوریتم}
+در پیاده سازی الگوریتم، ابتدا با
+\verb;Zobrist hashing;
+ بررسی می‌کنیم که آیا این  موقعییت قبلا دیده‌شده یا نه.
+ اگر
+ \verb;remDepth;
+ که مقدار عمق باقی‌مانده است، صفر بود، 
+ \verb;huristic;
+ موقعییت کنونی را بر می‌گردانیم.
+ سپس از تابع 
+ \verb;getPossibleMoves;
+ لیستی از حرکات ممکن می‌گیریم.
+ در صورتی که هیچ حرکت نداشتیم، اگر بورد پر بود، به  موقعییت
+ \verb;Terminal;
+ رسیده‌ایم، در غیر اینصورت موقعییت بورد را در صورتی که نوبت حریفمان‌بود محاسبه می‌کنیم.
+ سپس به ازای هر حرکت باقی‌مانده موقعییت بورد در صورت انجام آن حرکت را محاسبه می‌کنیم و بهترین موقعییت را پیدا می‌کنیم.
+ 
+ \begin{latin}
+ \begin{lstlisting}
+ 
+ \end{lstlisting}
+ \end{latin}
+ 
+ \section{اتصال به \lr{\ttfamily{Python}}}
+ 
+ برای اتصال به 
+ \verb;Python;
+ کد را به یک
+ \lr{\ttfamily{Python extension}}
+ تبدیل کردیم.
+ اطلاعات بیشتر در پاورقی موجود است.
+\LTRfootnote{\url{https://docs.python.org/3/extending/extending.html}}
+\LTRfootnote{\url{https://docs.python.org/3/extending/building.html}}
+\LTRfootnote{\url{https://docs.scipy.org/doc/numpy-1.15.0/reference/c-api.html}}
+
+به این منظور ابتدا باید با تابع زیر اطلاعات ورودی از 
+\verb;Python;
+را به فرمت
+\lr{\ttfamily{C++}}
+تبدیل کنیم.
+این تابع پس از اجرای الگوریتم، جدول نهایی را به جدول ورودی مقایسه می‌کند تا از باز کردانی صحیح همه‌ی حرکات اطمینان حاصل کند.
+
+ \begin{latin}
+ \begin{lstlisting}
+ static PyObject* calculateMiniMax(PyObject* self, PyObject* args) {
+
+	char *argnames[] = {"N", "grid", "player", "max_depth", NULL};
+
+	int N, player, max_depth;
+	int *gridVal;
+	PyObject *gridArg = NULL;
+	PyObject *gridArr = NULL;
+
+
+	if(!PyArg_ParseTuple(args, "iOii", &N, &gridArg, &player, &max_depth)) {
+		PyErr_SetString(PyExc_TypeError,
+									"Invalid Parameter");
+		return NULL;
+	}
+
+	// if(!PyArg_ParseTupleAndKeywords(args, kwds, "", argnames, &N, &grid, &player, &max_depth))
+	//   return NULL;
+	
+	// PyArray_FROM_OTF(gridArg, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+
+	gridVal = (int*) PyArray_DATA((PyArrayObject*)gridArg);
+
+	int **ngrid = new int*[N];
+	for(int i = 0; i < N; i++)
+		ngrid[i] = new int[N];
+	setup(N);
+	for(int i = 0; i < STATES; i++)
+		preCalc[i] = map<unsigned long long int, PreCalcData>();
+	moves = stack<ChangedSegment>();
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < N; j++)
+			ngrid[i][j] = gridVal[i * N + j];
+
+	// cout << player << " " << max_depth<< endl;
+	auto res = MiniMax(N, ngrid, generateHash(N, ngrid), max_depth, player, player);
+
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < N; j++)
+			if(ngrid[i][j] != gridVal[i * N + j]) {
+				cout << "FATAL ERROR" << endl;
+				cout << "MOVE SEQUECE WASN'T SYMMETRICAL" << endl;
+				for(int I = 0; I < N; I++, cout << endl)
+					for(int J = 0; J < N; J++)
+						cout << ngrid[I][J] << " ";
+				for(int I = 0; I < N; I++, cout << endl)
+					for(int J = 0; J < N; J++)
+						cout << gridVal[I * N + J] << " ";
+				exit(-1);
+			}
+
+	PyObject* ret = PyDict_New();
+
+	PyDict_SetItem(ret, PyUnicode_FromString("value"), PyLong_FromLong(res.value));
+	PyDict_SetItem(ret, PyUnicode_FromString("depth"), PyLong_FromLong(res.depth));
+	PyDict_SetItem(ret, PyUnicode_FromString("move"), PyTuple_Pack(2, 
+				PyLong_FromLong(res.bestMove.first), PyLong_FromLong(res.bestMove.second)));
+
+	return ret;
+}
+
+ \end{lstlisting}
+ \end{latin}
+ 
+ سپس باید این تابع را در
+ \verb;Python;
+ رجیستر کنیم.
+
+ \begin{latin}
+ \begin{lstlisting}
+ 
+static PyMethodDef MiniMaxMethods[] = {
+	{"calculateMiniMax", calculateMiniMax, METH_VARARGS, "Calculate Minimax"},
+	{NULL, NULL, 0, NULL}
+};
+
+static struct PyModuleDef MiniMaxModule = {
+	PyModuleDef_HEAD_INIT,
+	"MiniMax",   /* name of module */
+	NULL, /* module documentation, may be NULL */
+	-1,       /* size of per-interpreter state of the module,
+							 or -1 if the module keeps state in global variables. */
+	MiniMaxMethods
+};
+
+PyMODINIT_FUNC
+PyInit_MiniMax(void)
+{
+	return PyModule_Create(&MiniMaxModule);
+}
+
+
+/* This function is for registering python modules */
+int main(int argc, char *argv[]) {
+	wchar_t *program = Py_DecodeLocale(argv[0], NULL);
+	if (program == NULL) {
+			fprintf(stderr, "Fatal error: cannot decode argv[0]\n");
+			exit(1);
+	}
+
+	/* Add a built-in module, before Py_Initialize */
+	if (PyImport_AppendInittab("MiniMax", PyInit_MiniMax) == -1) {
+			fprintf(stderr, "Error: could not extend in-built modules table\n");
+			exit(1);
+	}
+
+	/* Pass argv[0] to the Python interpreter */
+	Py_SetProgramName(program);
+
+	/* Initialize the Python interpreter.  Required.
+		 If this step fails, it will be a fatal error. */
+	Py_Initialize();
+
+	PyMem_RawFree(program);
+	return 0;
+}
+
+ \end{lstlisting}
+ \end{latin}
+ 
+ برای کامپایل و نصب از
+ \verb;distutils;
+ در
+ \verb;Python;
+ استفاده شده.
+
+
+\begin{latin}
+\begin{python}
+from distutils.core import setup, Extension
+import os
+import shutil
+import numpy
+
+os.environ["CC"] = "g++"
+os.environ["CXX"] = "g++"
+
+
+module1 = Extension('MiniMax',
+                    sources=['calc_minimax_eng.cpp'],
+                    language="c++17",
+                    include_dirs=[numpy.get_include()],
+                    extra_compile_args=["-std=c++17", "-Wall", "-Wextra"],
+                    )
+
+setup(name='MiniMaxCppExtension',
+       version='0.1',
+       description='Calculates Minimax for othello',
+       ext_modules=[module1])
+\end{python}
+\end{latin}
 

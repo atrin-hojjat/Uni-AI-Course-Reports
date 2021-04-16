@@ -13,5 +13,11 @@
 \BOOKMARK [2][-]{subsection.2.3.2}{Minimax\040Agent}{section.2.3}% 13
 \BOOKMARK [2][-]{subsection.2.3.3}{رجیستر کردن agentها }{section.2.3}% 14
 \BOOKMARK [0][-]{chapter.3}{پیاده‌سازی الگوریتم Minimax}{}% 15
-\BOOKMARK [0][-]{appendix*.5}{منابع و مراجع}{}% 16
-\BOOKMARK [0][-]{appendix*.6}{پیوست}{}% 17
+\BOOKMARK [1][-]{section.3.1}{Zobrist\040Hashing}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.2}{تغییر جدول پس از هر حرکت}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.3}{نگه‌داری موقعییت‌ها‌ی دیده شده}{chapter.3}% 18
+\BOOKMARK [1][-]{section.3.4}{Alpha-Beta\040Pruning}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.5}{الگوریتم}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.6}{اتصال به Python}{chapter.3}% 21
+\BOOKMARK [0][-]{appendix*.5}{منابع و مراجع}{}% 22
+\BOOKMARK [0][-]{appendix*.6}{پیوست}{}% 23
