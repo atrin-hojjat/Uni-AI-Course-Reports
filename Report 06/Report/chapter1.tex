@@ -1,0 +1,714 @@
+\chapter{شرح مسئله و روند کار}
+
+\section{مقدمه}
+
+در این گزارش با استفاده از
+\verb;Collaborative filtering;
+یک
+سیستم توصیه‌گر فیلم
+می‌سازیم.
+پیاده سازی و کد در
+\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2006/}{اینجا}
+قابل مشاهده می‌باشد.
+برای پیاده سازی
+از
+\lr{Python}
+و کتاب‌خانه‌های
+\lr{numpy, sklearn, scipy, pandas}
+استفاده شده.
+
+\section{روش اجرا}
+برای اجرای برنامه نیاز به 
+\verb;Python;
+با حداقل ورژن 
+$3.8$
+دارید.
+
+برای اجرای برنامه ابتدا نیاز به راه اندازی یک
+\lr{Virtual environment}
+برای 
+\verb;Python;
+است.
+به این منظور در فولدر
+\lr{Report 06/Codes}
+دستورات زیر را اجرا کنید.
+
+\lstset{language=bash}
+\begin{latin}
+\begin{lstlisting}
+cd Report\\ 06/Codes
+python3 -m venv venv
+\end{lstlisting}
+\end{latin}
+
+برای 
+\verb;activate;
+کردن با توجه به سیتم عامل دستورات
+\href{https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/}{اینجا}
+\footnote{برای جزئیات بیشتر به 
+\href{https://docs.python.org/3/library/venv.html}{اینجا}
+ مراجعه کنید
+ }
+را اجرا کنید.
+
+برای نصب پیشنیاز ها دستورات زیر را اجرا کنید.
+
+\begin{latin}
+\begin{lstlisting}
+python3 -m pip install -r requirements.txt
+\end{lstlisting}
+\end{latin}
+
+
+برای اجرای کد نیاز به دانلود‌ دیتا‌ست دارید
+\cite{10.1145/2827872}
+.
+به صورت پیش‌فرض برنامه درست
+\lr{../Datasets/ml-latest-small/}
+به دنبال دیتیست می‌گردد. برای تغییر یک
+\lr{Environment variable}
+با نام
+\verb;DATASET_FOLDER;
+درست کنید و مقدار آن را به موقعییت فولدر دیتاست تغییر دهید.
+% یک فایل
+% \verb;.env;
+% مانند فایل
+% \verb;.env.example;
+% درست کنید و رد آن آدرس دانلود دیتاست را وارد کنید.
+
+سپس با اجرای فایل
+\lr{GenerateTestValues.py}
+فایل‌های تست و ترینینگ ساخته می‌شوند و می‌توانید فایل
+\lr{ItemToItemCF.py}
+را اجرا کنید.
+
+\begin{latin}
+\begin{lstlisting}
+  python3 GenerateTestValues.py
+  python3 ItemToItemCF.py
+\end{lstlisting}
+\end{latin}
+
+\chapter{روش تخمین امتیاز فیلم‌‌ها}
+برای تخمین از تکنیک
+\lr{Collaborative Filtering}
+با الگوریتم
+\lr{Nearest Neighbor}
+برای پیداکردن فیلم‌های مشابه استفاده می‌شود.
+
+مرجع فاصله در این گزارش زاویه بین دو بردار در نظر گرفته شده و با تا تابع
+\verb;cosine;
+اندازه‌گیری می‌شود. داریم
+
+\begin{latin}
+    \begin{equation}
+        \cos(x, y) = \frac{x.y} {\norm{x}.\norm{y}}
+    \end{equation}
+\end{latin}
+
+فرض کنید ماتریس
+\verb;T;
+حاوی اطلاعات رای دهی کاربران باشد و ماتریس
+\verb;D;
+حاوی ضرب داخلی بردار‌های امتیاز‌های هر جفت از فیلم ها باشد.
+$D_{diag}$
+ماتریس مربعی شامل قطر
+\lr{D}
+است.
+
+\begin{latin}
+    \begin{equation}
+      D = T . T^{T}
+    \end{equation}
+\end{latin}
+\begin{latin}
+    \begin{equation}
+    \begin{aligned}
+      1 / D_{diag} &=
+        \begin{pmatrix}
+        1/D_{1,1} & 0 & \cdots & 0 \\
+        0 & 1/D_{2,2} & \cdots & - \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        0 & 0 & \cdots & 1/D_{n,n}
+        \end{pmatrix} \\
+        &=
+        \begin{pmatrix}
+        1/\norm{T_{1}} & 0 & \cdots & 0 \\
+        0 & 1/\norm{T_{2}} & \cdots & - \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        0 & 0 & \cdots & 1/\norm{T_{n}}
+        \end{pmatrix}
+    \end{aligned}
+    \end{equation}
+\end{latin}
+\begin{latin}
+    \begin{equation}
+    \begin{aligned}
+      X &= (1/D_{diag}).(1/D_{diag})^{T} \\
+      &= \begin{pmatrix}
+          \frac{1} {\norm{T_{1}}^{2}} & \frac{1}{\norm{T_{1}}\norm{T_{2}}} & \cdots & \frac{1}{\norm{T_{1}}\norm{T_{n}}} \\
+          \frac{1}{\norm{T_{2}}\norm{T_{1}}} & \frac{1}{\norm{T_{2}}^{2}} & \cdots & \frac{1}{\norm{T_{2}}\norm{T_{n}}} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+          \frac{1}{\norm{T_{n}}\norm{T_{1}}} & \frac{1}{\norm{T_{n}}\norm{T_{2}}} & & \cdots \frac{1}{\norm{T_{n}}^{2}} \\
+        \end{pmatrix} \\
+    \end{aligned}
+    \end{equation}
+\end{latin}
+\begin{latin}
+    \begin{equation}
+    \begin{aligned}
+      N &= \sqrt{X} = \sqrt{(1/D_{diag}).(1/D_{diag})^{T}} \\
+      &= \begin{pmatrix}
+          \frac{1} {\norm{T_{1}}} & \frac{1}{\sqrt{\norm{T_{1}}\norm{T_{2}}}} & \cdots & \frac{1}{\sqrt{\norm{T_{1}}\norm{T_{n}}}} \\
+          \frac{1}{\sqrt{\norm{T_{2}}\norm{T_{1}}}} & \frac{1}{\norm{T_{2}}} & \cdots & \frac{1}{\sqrt{\norm{T_{2}}\norm{T_{n}}}} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+          \frac{1}{\sqrt{\norm{T_{n}}\norm{T_{1}}}} & \frac{1}{\norm{T_{\sqrt{}}\norm{T_{2}}}} & & \cdots \frac{1}{\norm{T_{n}}} \\
+        \end{pmatrix} \\
+    \end{aligned}
+    \end{equation}
+\end{latin}
+
+حال با ضرب درایه در درایه ماتریس‌های
+\verb;N;
+و
+\verb;D;
+می‌توان فاصله‌های دوبه‌دو‌ی هر دو فیلم را به‌دست آورد.
+
+این بخش در پایتون به صورت زیر به‌دست می‌آید:
+
+\begin{latin}
+  \begin{python}
+training_np = training_matrix.to_numpy()
+distances = np.matmul(training_np, training_np.transpose())
+
+distances_diagonal = 1. / np.diagonal(distances).copy()
+
+norm_size_mul = np.sqrt(np.outer(distances_diagonal, distances_diagonal))
+
+cosine_distances = np.multiply(distances, norm_size_mul)
+
+distances_pd = pd.DataFrame(cosine_distances)
+
+  \end{python}
+\end{latin}
+
+\section{پیداکردن \lr{\ttfamily{Nearest Neighbor}}}
+
+\begin{latin}
+  \begin{python}
+NN = NearestNeighbors(n_neighbors=n_neighbors, metric="cosine")
+
+NN.fit(training_csr)
+
+...
+
+dists, neighbors = NN.kneighbors(movie.values.reshape(1, -1), n_neighbors=n_neighbors)
+
+  \end{python}
+\end{latin}
+
+سپس همسایه‌هایی که
+\verb;user;
+به آنها رای نداده را حذف می‌کنیم.
+
+\begin{latin}
+  \begin{python}
+neighbors = [neighbor for neighbor in neighbors[0] if
+        training_matrix.iloc[neighbor, userInd] > 0]
+  \end{python}
+\end{latin}
+
+سپس باید با فرمول زیر تخمینی برای امتیاز فیلم به‌دست آوریم.
+
+\begin{latin}
+  \begin{equation}
+    r_{ix}=b_{ix} + \frac{\sum_{j \in N(i; x)} D_{ij}(r_{jx} - b{jx})}{\sum_{j \in N(i; x)} D_{ij}}
+  \end{equation}
+\end{latin}
+
+که در آن
+$r_{ij}$
+امتیاز فرد
+$j$
+به فیلم
+$i$
+و
+$b_{ij}=\mu + b_{i} + b_{j}$
+می‌باشد.
+$\mu$
+میانگین همه‌ی امتیاز‌ها،
+$b_{i}$
+فاصله‌ی میانگین امتیاز‌های فیلم
+$i$
+از میانگین کل، و
+$b_{j}$
+فاصله‌ی میانگین امتیاز‌های فرد
+$j$
+از میانگین کل است.
+
+\begin{latin}
+  \begin{python}
+
+user_avg = training.groupby(by="userId").mean()
+movie_avg = training.groupby(by="movieId").mean()
+global_avg = training.mean()['rating']
+
+bases = (np.ones(training_matrix.values.shape) * -global_avg +
+        user_avg.rating.values +
+        movie_avg.rating.values.reshape((movie_avg.rating.values.shape[0], 1)))
+
+...
+
+baseline = (global_avg +
+        movie_avg.iloc[movie_avg.index==int(row['movieId'])].values[0] +
+        user_avg.iloc[user_avg.index==int(row['userId'])].values[0])
+
+neigh_dists_all = distances_pd.iloc[neighbors]
+neigh_dists = neigh_dists_all.iloc[:, movieInd]
+
+
+bases_nec = bases_pd.iloc[neighbors].loc[:,
+        userInd]
+
+ratings_nec = training_matrix.iloc[neighbors].iloc[:,
+        training_matrix.columns==int(row['userId'])]
+
+
+...
+
+
+ans = bases[movieInd, userInd] + np.inner(ratings_nec.values.reshape(1, -1) -
+        bases_nec.values.reshape(1, -1),
+        neigh_dists.values.reshape(1, -1)) / np.sum(neigh_dists.values)
+
+
+  \end{python}
+\end{latin}
+
+
+برای تخمین
+\verb;error;
+حدود
+$10\%$
+از دیتا را ابتدا جدا و به‌عنوان تست استفاده می‌کنیم.
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+import numpy as np
+import os
+#  from dotenv import load_dotenv
+
+#  load_dotenv()
+
+dataset_folder = os.getenv("DATASET_FOLDER", '../Datasets/ml-latest-small/')
+
+
+def generate_tests_for_movies():
+    ratings = pd.read_csv(os.path.join(dataset_folder, "ratings.csv"))
+
+    users = ratings.groupby(by="userId").count()
+    movies = ratings.groupby(by="movieId").count()
+
+    test_users = users.sample(frac=0.1)
+    test_movies = movies.sample(frac=0.1)
+
+    test_ratings = ratings[ratings.userId.isin(test_users.index) &
+            ratings.movieId.isin(test_movies.index)]
+    training_ratings = ratings[(~ratings.userId.isin(test_users.index)) |
+            ~ratings.movieId.isin(test_movies.index)]
+
+
+    test_ratings.to_csv(os.path.join(dataset_folder, 'ratings.test.csv'))
+    training_ratings.to_csv(os.path.join(dataset_folder, 'ratings.training.csv'))
+
+if __name__ == '__main__':
+    generate_tests_for_movies()
+
+  \end{python}
+\end{latin}
+
+
+
+
+سپس با استفاده از این دیتا خطای مجموع مربعات را محاسبه می‌کنیم.
+
+\begin{latin}
+  \begin{equation}
+    err = \sqrt{\sum_{t \in tests}{(r_{t} - expected_{t})^{2}}}
+  \end{equation}
+\end{latin}
+
+\begin{latin}
+  \begin{python}
+
+    ...
+    err += (ans - row['rating']) ** 2
+    ...
+ans = math.sqrt(err / cnt)
+
+  \end{python}
+\end{latin}
+
+کد نهایی به صورت زیر می‌باشد:
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+import numpy as np
+from sklearn.neighbors import NearestNeighbors
+from scipy.sparse import csr_matrix
+import math
+import os
+#  from dotenv import load_dotenv
+
+#  load_dotenv()
+
+dataset_folder = os.getenv("DATASET_FOLDER", '../Datasets/ml-latest-small/')
+
+training = pd.read_csv(os.path.join(dataset_folder, "ratings.training.csv"))
+test = pd.read_csv(os.path.join(dataset_folder, "ratings.test.csv"))
+
+training_matrix = training.pivot(index="movieId", columns="userId",
+        values="rating").fillna(0)
+test_matrix = test.pivot(index="movieId", columns="userId",
+        values="rating").fillna(0)
+
+training_csr = csr_matrix(training_matrix)
+
+n_neighbors = 10
+NN = NearestNeighbors(n_neighbors=n_neighbors, metric="cosine")
+
+NN.fit(training_csr)
+
+user_avg = training.groupby(by="userId").mean()
+movie_avg = training.groupby(by="movieId").mean()
+global_avg = training.mean()['rating']
+
+training_np = training_matrix.to_numpy()
+distances = np.matmul(training_np, training_np.transpose())
+
+distances_diagonal = 1. / np.diagonal(distances).copy()
+
+norm_size_mul = np.sqrt(np.outer(distances_diagonal, distances_diagonal))
+
+cosine_distances = np.multiply(distances, norm_size_mul)
+
+distances_pd = pd.DataFrame(cosine_distances)
+
+bases = (np.ones(training_matrix.values.shape) * -global_avg +
+        user_avg.rating.values +
+        movie_avg.rating.values.reshape((movie_avg.rating.values.shape[0], 1)))
+
+bases_pd = pd.DataFrame(bases)
+
+err, cnt = 0, 0
+derr, dcnt = 0, 0
+
+for index, row in test.iterrows():
+    cnt += 1
+    if not (training_matrix.index.values==int(row['movieId'])).any():
+        print(global_avg, row['rating'])
+        err += (global_avg - row['rating']) ** 2
+        continue
+    if not (training_matrix.index.values==int(row['userId'])).any():
+        print(global_avg, row['rating'])
+        err += (global_avg - row['rating']) ** 2
+        continue
+    movieInd = np.where(training_matrix.index.values==int(row['movieId']))[0][0]
+    userInd = np.where(training_matrix.columns.values==int(row['userId']))[0][0]
+    movie = training_matrix.iloc[training_matrix.index==int(row['movieId'])]
+
+    dists, neighbors = NN.kneighbors(movie.values.reshape(1, -1), n_neighbors=n_neighbors)
+
+
+    #  for neighbor in neighbors[0]:
+    #      print(neighbor)
+
+    #      print(userInd)
+    #      print(training_matrix.iloc[neighbor, userInd])
+    #      print(training_matrix.iloc[neighbor,
+    #              training_matrix.columns==int(row['userId'])])
+
+    neighbors = [neighbor for neighbor in neighbors[0] if
+            training_matrix.iloc[neighbor, userInd] > 0]
+
+    baseline = (global_avg +
+            movie_avg.iloc[movie_avg.index==int(row['movieId'])].values[0] +
+            user_avg.iloc[user_avg.index==int(row['userId'])].values[0])
+
+
+    if len(neighbors) == 0:
+        print(global_avg, row['rating'])
+        err += (global_avg - row['rating']) ** 2
+        continue
+
+
+    neigh_dists_all = distances_pd.iloc[neighbors]
+    neigh_dists = neigh_dists_all.iloc[:, movieInd]
+
+    #  print("**********")
+    #  print()
+    #  print()
+
+    #  print(row)
+
+    #  print(neighbors)
+    #  print(neigh_dists)
+
+    bases_nec = bases_pd.iloc[neighbors].loc[:,
+            userInd]
+
+    ratings_nec = training_matrix.iloc[neighbors].iloc[:,
+            training_matrix.columns==int(row['userId'])]
+
+
+    ans = bases[movieInd, userInd] + np.inner(ratings_nec.values.reshape(1, -1) -
+            bases_nec.values.reshape(1, -1),
+            neigh_dists.values.reshape(1, -1)) / np.sum(neigh_dists.values)
+
+    #  print("Base", bases[movieInd, userInd])
+    #  print("Rating vec", ratings_nec.values.reshape(1, -1))
+    #  print("Base vec",bases_nec.values.reshape(1, -1))
+    #  print("Distances", neigh_dists.values.reshape(1, -1))
+    #  print("Inner", np.inner(ratings_nec.values.reshape(1, -1) -
+    #          bases_nec.values.reshape(1, -1),
+    #          neigh_dists.values.reshape(1, -1)))
+    #  print("Dividend", np.sum(neigh_dists.values))
+
+
+    print(ans, row['rating'])
+    err += (ans - row['rating']) ** 2
+    derr += (ans - row['rating']) ** 2
+    dcnt += 1
+    #  print()
+    #  print()
+
+print("Error with mean cases: ", math.sqrt(err / cnt))
+print("Error on calculated cases: ", math.sqrt(derr / dcnt))
+
+  \end{python}
+\end{latin}
+
+
+\chapter{بررسی دقت با تغییر تعداد همسایه‌ها}
+
+به‌منظور بررسی تاثیر تعداد همسایه‌ها از کد
+\verb;TestNumNeighbors.py;
+استفاده شده که میزان خطا را با تغییر تعداد همسایه‌ها می‌سنجد.
+برای اجرای این کد با درست کردن
+\lr{Environment Variable}
+با نام
+\verb;OUTPUT;
+می‌توان خروجی
+\verb;.jpg,.pgf;
+از نمودار حاصل دریافت کرد.
+
+\begin{latin}
+  \begin{python}
+
+import pandas as pd
+import numpy as np
+from sklearn.neighbors import NearestNeighbors
+from scipy.sparse import csr_matrix
+import math
+import os
+#  from dotenv import load_dotenv
+from matplotlib.legend_handler import HandlerLine2D, HandlerTuple
+import matplotlib
+#  matplotlib.use("pgf")
+import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+import seaborn as sns
+
+
+#  load_dotenv()
+
+dataset_folder = os.getenv("DATASET_FOLDER", '../Datasets/ml-latest-small/')
+
+training = pd.read_csv(os.path.join(dataset_folder, "ratings.training.csv"))
+test = pd.read_csv(os.path.join(dataset_folder, "ratings.test.csv"))
+
+training_matrix = training.pivot(index="movieId", columns="userId",
+        values="rating").fillna(0)
+test_matrix = test.pivot(index="movieId", columns="userId",
+        values="rating").fillna(0)
+
+training_csr = csr_matrix(training_matrix)
+
+
+user_avg = training.groupby(by="userId").mean()
+movie_avg = training.groupby(by="movieId").mean()
+global_avg = training.mean()['rating']
+
+training_np = training_matrix.to_numpy()
+distances = np.matmul(training_np, training_np.transpose())
+
+distances_diagonal = 1. / np.diagonal(distances).copy()
+
+norm_size_mul = np.sqrt(np.outer(distances_diagonal, distances_diagonal))
+
+cosine_distances = np.multiply(distances, norm_size_mul)
+
+distances_pd = pd.DataFrame(cosine_distances)
+
+bases = (np.ones(training_matrix.values.shape) * -global_avg +
+        user_avg.rating.values +
+        movie_avg.rating.values.reshape((movie_avg.rating.values.shape[0], 1)))
+
+bases_pd = pd.DataFrame(bases)
+
+
+dataX, dataErr, dataDErr = [], [], []
+
+for n_neighbors in range(1, 100, 3):
+    err, cnt = 0, 0
+    derr, dcnt = 0, 0
+
+    NN = NearestNeighbors(n_neighbors=n_neighbors, metric="cosine")
+
+    NN.fit(training_csr)
+    for index, row in test.iterrows():
+        cnt += 1
+        if not (training_matrix.index.values==int(row['movieId'])).any():
+            #  print(global_avg, row['rating'])
+            err += (global_avg - row['rating']) ** 2
+            continue
+        if not (training_matrix.index.values==int(row['userId'])).any():
+            #  print(global_avg, row['rating'])
+            err += (global_avg - row['rating']) ** 2
+            continue
+        movieInd = np.where(training_matrix.index.values==int(row['movieId']))[0][0]
+        userInd = np.where(training_matrix.columns.values==int(row['userId']))[0][0]
+        movie = training_matrix.iloc[training_matrix.index==int(row['movieId'])]
+
+        dists, neighbors = NN.kneighbors(movie.values.reshape(1, -1), n_neighbors=n_neighbors)
+
+
+        #  for neighbor in neighbors[0]:
+        #      print(neighbor)
+
+        #      print(userInd)
+        #      print(training_matrix.iloc[neighbor, userInd])
+        #      print(training_matrix.iloc[neighbor,
+        #              training_matrix.columns==int(row['userId'])])
+
+        neighbors = [neighbor for neighbor in neighbors[0] if
+                training_matrix.iloc[neighbor, userInd] > 0]
+
+        baseline = (global_avg +
+                movie_avg.iloc[movie_avg.index==int(row['movieId'])].values[0] +
+                user_avg.iloc[user_avg.index==int(row['userId'])].values[0])
+
+
+        if len(neighbors) == 0:
+            #  print(global_avg, row['rating'])
+            err += (global_avg - row['rating']) ** 2
+            continue
+
+
+        neigh_dists_all = distances_pd.iloc[neighbors]
+        neigh_dists = neigh_dists_all.iloc[:, movieInd]
+
+        #  print("**********")
+        #  print()
+        #  print()
+
+        #  print(row)
+
+        #  print(neighbors)
+        #  print(neigh_dists)
+
+        bases_nec = bases_pd.iloc[neighbors].loc[:,
+                userInd]
+
+        ratings_nec = training_matrix.iloc[neighbors].iloc[:,
+                training_matrix.columns==int(row['userId'])]
+
+
+        ans = bases[movieInd, userInd] + np.inner(ratings_nec.values.reshape(1, -1) -
+                bases_nec.values.reshape(1, -1),
+                neigh_dists.values.reshape(1, -1)) / np.sum(neigh_dists.values)
+
+        #  print("Base", bases[movieInd, userInd])
+        #  print("Rating vec", ratings_nec.values.reshape(1, -1))
+        #  print("Base vec",bases_nec.values.reshape(1, -1))
+        #  print("Distances", neigh_dists.values.reshape(1, -1))
+        #  print("Inner", np.inner(ratings_nec.values.reshape(1, -1) -
+        #          bases_nec.values.reshape(1, -1),
+        #          neigh_dists.values.reshape(1, -1)))
+        #  print("Dividend", np.sum(neigh_dists.values))
+
+
+        #  print(ans, row['rating'])
+        err += (ans - row['rating']) ** 2
+        derr += (ans - row['rating']) ** 2
+        dcnt += 1
+        #  print()
+        #  print()
+
+    print("**************")
+    print(f"Neighbors: {n_neighbors}")
+    print("Error with mean cases: ", math.sqrt(err / cnt))
+    print("Error on calculated cases: ", math.sqrt(derr / dcnt) if dcnt > 0 else 0)
+    dataX.append(n_neighbors)
+    dataErr.append(math.sqrt(err / cnt))
+    dataDErr.append(False)
+    dataX.append(n_neighbors)
+    dataErr.append(math.sqrt(derr / dcnt) if dcnt > 0 else 0)
+    dataDErr.append(True)
+    print("**************")
+
+testname = "Error by No. neighbors"
+y_lab = "Mean squared error"
+x_lab = "No. Neighbors"
+
+plt.figure()
+sns.relplot(data=pd.DataFrame({"n_n": dataX, "er": dataErr, "From Data": dataDErr}), hue="From Data", x="n_n", y="er", kind="line", )
+
+plt.title(testname)
+plt.xlabel(x_lab)
+plt.ylabel(y_lab)
+
+if os.getenv("OUTPUT"):
+    output = os.getenv("OUTPUT")
+    if not os.path.exists(os.path.dirname(os.path.join("./output",
+        output, f"{testname}.jpg"))):
+        try: os.makedirs(os.path.dirname(os.path.join("./output",
+            output, f"{testname}.jpg")))
+        except OSError as exc: # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+    plt.savefig(os.path.join("./output", output, f"{testname}.jpg"))
+    matplotlib.rcParams.update({
+        "pgf.texsystem": "xelatex",
+        'text.usetex': True,
+        'pgf.rcfonts': False,
+        "font.family": "mononoki Nerd Font Mono",
+        "font.serif": [],
+        #  "font.cursive": ["mononoki Nerd Font", "mononoki Nerd Font Mono"],
+    })
+    plt.savefig(os.path.join("./output", output, f"{testname}.pgf"))
+
+plt.show()
+
+
+
+
+
+
+  \end{python}
+\end{latin}
+
+
+در نهایت با بررسی نمودار نهایی تفاوت چندانی بین بررسی ۱۰ تا ۱۰۰ همسایه مشاهده نشد، که البته میتواند به دلیل محدود بودن دیتا باشد.
+در این نمودار
+\verb;From Data;
+فقط دیتا‌هایی را در نظر می‌گیرد که در همسایه‌هایش این فرد حداقل یک امتیاز داشته باشد.
+در این شرایط
+\verb;From Data = False;
+از میانگین کلی امتیاز‌ها استفاده می‌کند.
+
+
+
+\insertfig{figures/Error by No neighbors.pgf}{\lr{Error by No. Neighbors}}{ERR_BY_NEIGH_100}
