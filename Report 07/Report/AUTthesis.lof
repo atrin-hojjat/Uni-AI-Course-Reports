@@ -1,0 +1,20 @@
+\hspace *{.5cm}شکل\hfill صفحه \par 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3-1}{\ignorespaces \lr {Sample decision tree ouput}}}{11}{figure.3.1}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces \lr {Decision Tree running time by max depth}}}{12}{figure.3.2}%
+\contentsline {figure}{\numberline {3-3}{\ignorespaces \lr {Decision Tree Accuracy measures by max depth}}}{13}{figure.3.3}%
+\contentsline {figure}{\numberline {3-4}{\ignorespaces \lr {Sample decision tree ouput}}}{17}{figure.3.4}%
+\contentsline {figure}{\numberline {3-5}{\ignorespaces \lr {Random forest running time by max depth}}}{18}{figure.3.5}%
+\contentsline {figure}{\numberline {3-6}{\ignorespaces \lr {Random forest accuracy by max depth}}}{19}{figure.3.6}%
+\contentsline {figure}{\numberline {3-7}{\ignorespaces \lr {Random forest running time by no. estimators}}}{20}{figure.3.7}%
+\contentsline {figure}{\numberline {3-8}{\ignorespaces \lr {Random forest accuracy by no. estimators}}}{21}{figure.3.8}%
+\contentsline {figure}{\numberline {3-9}{\ignorespaces \lr {Perceptron Accuracy mearsures by maximum number of iterations}}}{24}{figure.3.9}%
+\contentsline {figure}{\numberline {3-10}{\ignorespaces \lr {Perceptron time by maximum number of iterations}}}{25}{figure.3.10}%
+\contentsline {figure}{\numberline {3-11}{\ignorespaces \lr {Perceptron accuracy measures by Learning rate}}}{26}{figure.3.11}%
+\contentsline {figure}{\numberline {3-12}{\ignorespaces \lr {Perceptron time by Learning rate}}}{27}{figure.3.12}%
+\contentsline {figure}{\numberline {3-13}{\ignorespaces \lr {Perceptron accuracy measures by tolerance}}}{28}{figure.3.13}%
+\contentsline {figure}{\numberline {3-14}{\ignorespaces \lr {Perceptron time by tolerance}}}{29}{figure.3.14}%
+\addvspace {10\p@ }
+\contentsfinish 

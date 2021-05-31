@@ -1,0 +1,710 @@
+\chapter{شرح مسئله و روند کار}
+
+\section{مقدمه}
+در این گزارش عمکرد روش‌های مختلف طبقه‌بندی را روی یک دیتاست مقایسه می‌کنیم.
+پیاده سازی و کد در
+\href{https://github.com/atrin-hojjat/Uni-AI-Course-Reports/blob/main/Report\%2007/}{اینجا}
+قابل مشاهده می‌باشد.
+برای پیاده سازی
+از
+\lr{Python}
+و کتاب‌خانه‌های
+\lr{numpy, sklearn, matplotlib, pandas }
+استفاده شده.
+
+\section{روش اجرا}
+برای اجرای برنامه نیاز به 
+\verb;Python;
+با حداقل ورژن 
+$3.8$
+دارید.
+
+برای اجرای برنامه ابتدا نیاز به راه اندازی یک
+\lr{Virtual environment}
+برای 
+\verb;Python;
+است.
+به این منظور در فولدر
+\lr{Report 07/codes}
+دستورات زیر را اجرا کنید.
+
+\lstset{language=bash}
+\begin{latin}
+\begin{lstlisting}
+cd Report\\ 06/Codes
+python3 -m venv venv
+\end{lstlisting}
+\end{latin}
+
+برای 
+\verb;activate;
+کردن با توجه به سیتم عامل دستورات
+\href{https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/}{اینجا}
+\footnote{برای جزئیات بیشتر به 
+\href{https://docs.python.org/3/library/venv.html}{اینجا}
+ مراجعه کنید
+ }
+را اجرا کنید.
+
+برای نصب پیشنیاز ها دستورات زیر را اجرا کنید.
+
+\begin{latin}
+\begin{lstlisting}
+python3 -m pip install -r requirements.txt
+\end{lstlisting}
+\end{latin}
+
+
+برای اجرای کد نیاز به دانلود‌ دیتا‌ست دارید
+.
+مکان از دیتاست را یا باشد
+\verb;environment variable;
+با نام
+\verb;DATASET_FILE;
+و یا در هنگام اجرای برنامه وارد کنید.
+
+با اجرای فایل
+\verb;Loader.py;
+می‌توانید تست‌ّهای برنامه را اجرا کنید.
+
+\begin{latin}
+\begin{lstlisting}
+  python3 Loader.py
+\end{lstlisting}
+\end{latin}
+
+\chapter{دیتاست}
+هدف این دیتاست تشخیص قارچ‌های خوراکی از سمی می‌باشد.
+اطلاعات آن شامل شکل، جنس، بو، و... قارچ‌ها می‌باشد.
+\LTRfootnote{
+  \href{https://www.kaggle.com/uciml/mushroom-classification}{Dataset}
+}
+برچست قارچ‌های خوراکی
+\verb;e;
+و قارچ‌های سمی
+\verb;p;
+می‌باشد.
+برچسب‌های دیگز اطلاعات:
+
+\begin{latin}
+cap-shape: bell=b,conical=c,convex=x,flat=f, knobbed=k,sunken=s
+
+cap-surface: fibrous=f,grooves=g,scaly=y,smooth=s
+
+cap-color: brown=n,buff=b,cinnamon=c,gray=g,green=r,pink=p,purple=u,red=e,white=w,yellow=y
+
+bruises: bruises=t,no=f
+
+odor: almond=a,anise=l,creosote=c,fishy=y,foul=f,musty=m,none=n,pungent=p,spicy=s
+
+gill-attachment: attached=a,descending=d,free=f,notched=n
+
+gill-spacing: close=c,crowded=w,distant=d
+
+gill-size: broad=b,narrow=n
+
+gill-color: black=k,brown=n,buff=b,chocolate=h,gray=g, green=r,orange=o,pink=p,purple=u,red=e,white=w,yellow=y
+
+stalk-shape: enlarging=e,tapering=t
+
+stalk-root: bulbous=b,club=c,cup=u,equal=e,rhizomorphs=z,rooted=r,missing=?
+
+stalk-surface-above-ring: fibrous=f,scaly=y,silky=k,smooth=s
+
+stalk-surface-below-ring: fibrous=f,scaly=y,silky=k,smooth=s
+
+stalk-color-above-ring: brown=n,buff=b,cinnamon=c,gray=g,orange=o,pink=p,red=e,white=w,yellow=y
+
+stalk-color-below-ring: brown=n,buff=b,cinnamon=c,gray=g,orange=o,pink=p,red=e,white=w,yellow=y
+
+veil-type: partial=p,universal=u
+
+veil-color: brown=n,orange=o,white=w,yellow=y
+
+ring-number: none=n,one=o,two=t
+
+ring-type: cobwebby=c,evanescent=e,flaring=f,large=l,none=n,pendant=p,sheathing=s,zone=z
+
+spore-print-color: black=k,brown=n,buff=b,chocolate=h,green=r,orange=o,purple=u,white=w,yellow=y
+
+population: abundant=a,clustered=c,numerous=n,scattered=s,several=v,solitary=y
+
+habitat: grasses=g,leaves=l,meadows=m,paths=p,urban=u,waste=w,woods=d
+\end{latin}
+
+\subsection{تبدیل دسته‌بندی‌ها به اعداد}
+برای تبدیل دسته‌های دوتایی به اعداد صرفا یک مقدار را برابر ۰ و دیگری را برابر ۱ قرار دادیم.
+راه‌حل مشابهی برای دسته‌های بزرگ‌تر از ۲ امکان پذیر نمی‌باشد زیرا به دسته‌ها اطلاعات نامربوط اضافه می‌شود.
+مثلا اگر برای دسته بندی سه رنگ قرمز، آبی و زرد اعداد ۰ تا ۲ را استفاده کنیم، ممکن است نتایجی مانند : قرمز بزرگ‌تر از آبی است داشته باشیم.
+به منظور رفع این مشکل به ازای هر دسته یک ستون جدید اضافه می‌کنیم.
+
+سپس باید
+\verb;label;
+ها را جدا کرده و تعدادی از ورودی‌ها را به عنوان تست انتخاب کنیم.
+
+این بخش در کد با کمک
+\verb;Pandas;
+و
+\verb;SKLearn;
+انجام می‌شود.
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+import os
+
+
+def LoadMushrooms(filename=None):
+    if filename is None:
+        filename = os.environ.get('DATASET_FILE', None)
+
+    if filename is None:
+        filename = input("Enter dataset file location: ")
+
+    mushrooms_raw = pd.read_csv(filename)
+
+    encoder = OneHotEncoder(drop="if_binary")
+    mushrooms = encoder.fit_transform(mushrooms_raw).toarray()
+
+    categorized_columns = []
+
+    for i in range(len(mushrooms_raw.columns)):
+        column_name = mushrooms_raw.columns[i]
+        if len(encoder.categories_[i]) > 2:
+            for val in encoder.categories_[i]:
+                categorized_columns.append(f"{column_name}_{val}")
+        else:
+            categorized_columns.append(f"{column_name}")
+    print(encoder.categories_)
+
+    mushrooms = pd.DataFrame(data=mushrooms, columns=categorized_columns)
+
+    input_data = mushrooms.drop(['class'], axis=1)
+    output_data = mushrooms['class']
+
+
+    X_train, X_test, y_train, y_test = train_test_split(input_data, output_data,
+            test_size=0.2, random_state=1)
+
+    return X_train, X_test, y_train, y_test, mushrooms, input_data, output_data
+
+ \end{python}
+\end{latin}
+
+
+\chapter{الگوریتم‌ها}
+برای پیاده‌سازی الگوریتم‌ها از کتابخانه‌ی
+\verb;SKLearn;
+استفاده‌شده.
+
+\section{\lr{\ttfamily{Model}}}
+کلاس
+\verb;Model;
+یک
+\verb;Interface;
+برای پیاده‌سازی الگوریتم‌هاست که دو تابع
+\verb;train;
+و
+\verb;predict;
+را معرفی‌میکند.
+همه‌ی
+\verb;Classifier;
+ها از این کلاس ارث‌بری می‌کنند.
+برای بررسی دقت و صحت از
+\lr{\ttfamily{$sklearn.metrics.classification\_report$}}
+استفاده شده است.
+
+\section{\lr{\ttfamily{Decision Tree}}}
+برای
+\lr{Decision Tree}
+از
+\lr{\ttfamily{sklearn.tree.DecisionTree}}
+استفاده شده.
+بغیر از توابع
+\verb;__init__;
+،
+\verb;train;
+و
+\verb;predict;
+یک تابع برای نمایش دادن درخت خروجی نیز پیاده‌سازی شده.
+
+\begin{latin}
+  \begin{python}
+class DecisionTree(Model):
+    def __init__(self, X, y, name, feature_names, criterion="gini", splitter="best",
+            max_depth=2, min_samples_leaf=1):
+        self.X = X
+        self.y = y
+        self.model = DecisionTreeClassifier(criterion=criterion, splitter=splitter,
+                max_depth=max_depth, min_samples_leaf=min_samples_leaf)
+        self.name = name
+        self.feature_names = feature_names
+
+    def train(self):
+        self.model.fit(self.X, self.y)
+
+    def predict(self, data):
+        return self.model.predict(data)
+  \end{python}
+\end{latin}
+
+
+تابع
+\verb;save_output;
+درخت نهایی را با استفاده از
+\verb;sklearn.tree.plot_tree;
+در یک
+\verb;figure;
+با
+\verb;matplotlib;
+نمایش می‌دهد و خروجی را در یک فایم در پوشه‌ی
+\lr{\ttfamily{Report 07/code/output}}
+با فرمت
+\verb;jpg;
+زخیره می‌کند.
+اگر مقدار
+\lr{\ttfamily{Environment variable}}
+با نام
+\verb;LATEX_OUTPUT;
+برابر یک باشد، بجای نمایش‌دادن یک فایل
+\verb;pfg;
+خروجی می‌دهد.
+
+
+\begin{latin}
+  \begin{python}
+    def save_output(self):
+        plt.figure()
+        fig, axes = plt.subplots(nrows=1, ncols=1,
+                figsize=(10, 10), dpi=900)
+        dec_tree = plot_tree(decision_tree=self.model, feature_names=self.feature_names,
+                             filled=True , precision=4, rounded=True, ax=axes)
+        if not os.path.exists(os.path.dirname(os.path.join("./output",
+            f"{self.name}.jpg"))):
+            try: os.makedirs(os.path.dirname(os.path.join("./output",
+                f"{self.name}.jpg")))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        plt.savefig(os.path.join("./output", f"{self.name}.jpg"))
+        if os.environ.get('LATEX_OUTPUT', '0') == '1':
+            matplotlib.rcParams.update({
+                "pgf.texsystem": "xelatex",
+                'text.usetex': True,
+                'pgf.rcfonts': False,
+                "font.family": "mononoki Nerd Font Mono",
+                "font.serif": [],
+                #  "font.cursive": ["mononoki Nerd Font", "mononoki Nerd Font Mono"],
+            })
+            plt.savefig(os.path.join("./output", f"{self.name}.pgf"))
+        plt.show()
+  \end{python}
+\end{latin}
+
+\subsection{خروجی}
+در شکل
+~\cref{DECTRE_MUSHROOM_OUT}
+یک نمونه‌ی خروجی
+\lr{\ttfamily{Decision Tree}}
+با حداکثر عمق ۶ نمایش داده شده.
+دقت و صحت این الگوریتم در جدول
+\cref{DECTRE_TAB_6}
+،
+\cref{DECTRE_TAB_3}
+و
+\cref{DECTRE_TAB_2}
+نشان داده شده.
+
+
+\begin{latin}
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Decision tree accuracy measures with max depth 6}}
+    \label{DECTRE_TAB_6}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+
+         \textbf{e} & 1.00 & 1.00 & 1.00 & 820 \\
+         \textbf{p} & 1.00 & 1.00 & 1.00 & 805 \\
+
+    \textbf{accuracy} & & & 1.00 & 1625 \\
+   \textbf{macro avg} & 1.00 & 1.00 & 1.00 & 1625 \\
+\textbf{weighted avg} & 1.00 & 1.00 & 1.00 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Decision tree accuracy measures with max depth 3}}
+    \label{DECTRE_TAB_3}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+
+           \textbf{e} & 0.99 & 0.99 & 0.99 & 820 \\
+           \textbf{p} & 0.99 & 0.99 & 0.99 & 805 \\
+
+    \textbf{accuracy} & & & 0.99 & 1625 \\
+   \textbf{macro avg} & 0.99 & 0.99 & 0.99 & 1625 \\
+\textbf{weighted avg} & 0.99 & 0.99 & 0.99 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Decision tree accuracy measures with max depth 2}}
+    \label{DECTRE_TAB_2}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+           \textbf{e} & 0.97 & 0.94 & 0.95 & 820 \\
+           \textbf{p} & 0.94 & 0.97 & 0.96 & 805 \\
+
+    \textbf{accuracy} & & & 0.96 & 1625 \\
+   \textbf{macro avg} & 0.96 & 0.96 & 0.96 & 1625 \\
+\textbf{weighted avg} & 0.96 & 0.96 & 0.96 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+\end{latin}
+
+\insertfig{figures/decision_tree_mushroom.pgf}{\lr{Sample decision tree ouput}}{DECTRE_MUSHROOM_OUT}
+
+
+\subsection{بررسی الگوریتم}
+در این الگوریتم، با افزایش حداکثر عمق تا ۵ دقت افزایش می‌یابد و پس از آن تقریبا ثابت می‌ماند.
+زمان اجرا نیز با افزایش حداکثر عمق اکیدا صعودی است.
+(  ~\cref{DECTRE_GRAPH_ACC}
+~\cref{DECTRE_GRAPH_TIME}
+)
+
+
+\insertfig{figures/Decision Tree running time by Max Depth.pgf}{\lr{Decision Tree running time by max depth}}{DECTRE_GRAPH_TIME}
+\insertfig{figures/DecisionTree measures by Max Depth.pgf}{\lr{Decision Tree Accuracy measures by max depth}}{DECTRE_GRAPH_ACC}
+
+
+\section{\lr{\ttfamily{Random Forest}}}
+پیاده سازی این الگوریتم نیز مانند پیاده‌سازی
+\verb;Decision Tree;
+می‌باشد با این تفاوت که برای نمایش دادن آن فقط ۱۵ درخت اول را نمایش می‌دهیم.
+در شکل
+~\cref{RNDFOR_MUSHROOM_OUT}
+یک نمونه‌ی خروجی و در جدول‌های
+\cref{RNDFOR_TAB_5}
+\cref{RNDFOR_TAB_2}
+دقت و صحت مدل را مشاهده‌ می‌کنید.
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import plot_tree
+import os
+import matplotlib
+import matplotlib.pyplot as plt
+from models.Model import Model
+
+class RandomForest(Model):
+    def __init__(self, X, y, name, feature_names, n_estimators=100,
+            criterion="gini", min_samples_split=2,
+            max_depth=2, min_samples_leaf=1, PLOT_nrows=3, PLOT_ncols=5):
+        self.X = X
+        self.y = y
+        self.model = RandomForestClassifier(n_estimators=n_estimators, criterion=criterion,
+                min_samples_split=min_samples_split,
+                max_depth=max_depth, min_samples_leaf=min_samples_leaf, n_jobs=4)
+        self.name = name
+        self.feature_names = feature_names
+        self.PLOT_ncols = PLOT_ncols
+        self.PLOT_nrows = PLOT_nrows
+
+    def train(self):
+        self.model.fit(self.X, self.y)
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+    def save_output(self):
+        plt.figure()
+        fig, axes = plt.subplots(nrows=self.PLOT_nrows, ncols=self.PLOT_ncols,
+                figsize=(7, 6), dpi=900)
+
+        for i in range(15):
+            dec_tree = plot_tree(decision_tree=self.model.estimators_[i],
+                    feature_names=self.feature_names,
+                     filled=True , precision=4, rounded=True,
+                     ax=axes[int(i / self.PLOT_ncols), i % self.PLOT_ncols])
+            axes[int(i / self.PLOT_ncols), i % self.PLOT_ncols].set_title('Estimator: ' + str(i), fontsize = 11)
+        if not os.path.exists(os.path.dirname(os.path.join("./output",
+            f"{self.name}.jpg"))):
+            try: os.makedirs(os.path.dirname(os.path.join("./output",
+                f"{self.name}.jpg")))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        plt.savefig(os.path.join("./output", f"{self.name}.jpg"))
+        if os.environ.get('LATEX_OUTPUT', '0') == '1':
+            matplotlib.rcParams.update({
+                "pgf.texsystem": "xelatex",
+                'text.usetex': True,
+                'pgf.rcfonts': False,
+                "font.family": "mononoki Nerd Font Mono",
+                "font.serif": [],
+                #  "font.cursive": ["mononoki Nerd Font", "mononoki Nerd Font Mono"],
+            })
+            plt.savefig(os.path.join("./output", f"{self.name}.pgf"))
+        plt.show()
+
+  \end{python}
+\end{latin}
+
+
+\begin{latin}
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Random Forest accuracy measures with max depth 5}}
+    \label{RNDFOR_TAB_5}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+           \textbf{e} & 0.97 & 1.00 & 0.99 & 820\\
+           \textbf{p} & 1.00 & 0.97 & 0.99 & 805\\
+
+    \textbf{accuracy} & & & 0.99 & 1625 \\
+   \textbf{macro avg} & 0.99 & 0.99 & 0.99 & 1625 \\
+\textbf{weighted avg} & 0.99 & 0.99 & 0.99 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Random Forest accuracy measures with max depth 2}}
+    \label{RNDFOR_TAB_2}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+           \textbf{e} & 0.87 & 1.00 & 0.93 & 820\\
+           \textbf{p} & 1.00 & 0.85 & 0.92 & 805\\
+
+    \textbf{accuracy} & & & 0.92 & 1625 \\
+   \textbf{macro avg} & 0.93 & 0.92 & 0.92 & 1625 \\
+\textbf{weighted avg} & 0.93 & 0.92 & 0.92 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+\end{latin}
+
+\insertfig{figures/random_forest_mushroom.pgf}{\lr{Sample decision tree ouput}}{RNDFOR_MUSHROOM_OUT}
+
+\subsection{بررسی الگوریتم}
+با افزایش حداکثر عمق دقت و صحت داعما افزایش می‌یابند اما زمان اجرا تغییر چندانی نمی‌کند.
+(
+\cref{RNDFOR_GRAPH_DEPTH_TIME}
+\cref{RNDFOR_GRAPH_DEPTH_ACC}
+)
+با تغییر تعداد درخت‌ها تا ۱۰۰ دقت افزایش نمی‌یابد اما زمان اجرا ۴ تا ۵ برابر می‌شود.
+(
+\cref{RNDFOR_GRAPH_EST_TIME}
+\cref{RNDFOR_GRAPH_EST_ACC}
+)
+\insertfig{figures/Random Forest running time by Max Depth.pgf}{\lr{Random forest running time by max depth}}{RNDFOR_GRAPH_DEPTH_TIME}
+\insertfig{figures/Random Forest measures by Max Depth.pgf}{\lr{Random forest accuracy by max depth}}{RNDFOR_GRAPH_DEPTH_ACC}
+\insertfig{figures/Random Forest running time by No. Estimators.pgf}{\lr{Random forest running time by no. estimators}}{RNDFOR_GRAPH_EST_TIME}
+\insertfig{figures/Random Forest measures by No. Estimators.pgf}{\lr{Random forest accuracy by no. estimators}}{RNDFOR_GRAPH_EST_ACC}
+
+
+\section{\lr{\ttfamily{Perceptron and KNN}}}
+
+پیاده سازی این دو شبکه مانند شبکه‌های دیگر اما بدون نمایش انجام شده. این دو با کمترین زمان به دقت و صحت
+100\%
+رسیدند.
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.linear_model import Perceptron as PerceptronClassifier
+import os
+import matplotlib.pyplot as plt
+from models.Model import Model
+
+
+class Perceptron(Model):
+    def __init__(self, X, y, name, feature_names, max_iter=1000, tolerance=1e-3,
+            eta0=1):
+        self.X = X
+        self.y = y
+        self.model = PerceptronClassifier(max_iter=max_iter, tol=tolerance,
+                eta0=eta0, n_jobs=4)
+        self.name = name
+        self.feature_names = feature_names
+
+    def train(self):
+        self.model.fit(self.X, self.y)
+
+    def predict(self, data):
+        return self.model.predict(data)
+  \end{python}
+\end{latin}
+
+\begin{latin}
+  \begin{python}
+import pandas as pd
+from sklearn.neighbors import KNeighbors
+import os
+import matplotlib.pyplot as plt
+from models.Model import Model
+
+
+class KNearestNeighbors(Model):
+    def __init__(self, X, y, name, feature_names, n_neighbors=6):
+        self.X = X
+        self.y = y
+        self.model = KNeighbors(n_neighbors=n_neighbors, n_jobs=4)
+        self.name = name
+        self.feature_names = feature_names
+
+    def train(self):
+        self.model.fit(self.X, self.y)
+
+    def predict(self, data):
+        return self.model.predict(data)
+  \end{python}
+\end{latin}
+
+\section{خروجی}
+در جدول‌های
+\cref{PERC_TAB}
+و
+\cref{KNN_TAB}
+دقت
+\verb;Perceptron;
+و
+\verb;K-Nearest Neighbors;
+نمایش داده شده.
+
+
+\begin{latin}
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Perceptron Results}}
+    \label{PERC_TAB}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+           \textbf{e} & 1.00 & 1.00 & 1.00 & 820\\
+           \textbf{p} & 1.00 & 1.00 & 1.00 & 805\\
+
+    \textbf{accuracy} & & & 1.00 & 1625 \\
+   \textbf{macro avg} & 1.00 & 1.00 & 1.00 & 1625 \\
+\textbf{weighted avg} & 1.00 & 1.00 & 1.00 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{K-Nearest Neighbors Results}}
+    \label{KNN_TAB}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{support} \\
+      \hline
+           \textbf{e} & 1.00 & 1.00 & 1.00 & 820\\
+           \textbf{p} & 1.00 & 1.00 & 1.00 & 805\\
+
+    \textbf{accuracy} & & & 1.00 & 1625 \\
+   \textbf{macro avg} & 1.00 & 1.00 & 1.00 & 1625 \\
+\textbf{weighted avg} & 1.00 & 1.00 & 1.00 & 1625
+    \end{tabular}
+  \end{center}
+\end{table}
+\end{latin}
+
+\subsection{بررسی الگوریتم}
+با تغییر
+\verb;Tolerance;
+و
+تعداد
+\verb;Iteraction;
+از دقت شبکه
+\verb;Perceptron;
+کم نمی‌شود اما با تغییر
+\verb;Learning Rate;
+دقت و صحت آن در بعضی موارد کم می‌شود.
+(
+\cref{PERC_GRAPH_ITER_ACC}
+\cref{PERC_GRAPH_ETA0_ACC}
+\cref{PERC_GRAPH_TOL_ACC}
+)
+تغیرات زمان اجرای
+\verb;Perceptron;
+در محدوده‌ی ۵ تا ۱۰ میلی‌ثانیه و قابل چشم‌پوشی می‌باشد.
+(
+\cref{PERC_GRAPH_ITER_TIME}
+\cref{PERC_GRAPH_ETA0_TIME}
+\cref{PERC_GRAPH_TOL_TIME}
+)
+
+\insertfig{figures/Perceptron accuracy by increasing maximum number of iterations.pgf}{\lr{Perceptron Accuracy mearsures by maximum number of iterations}}{PERC_GRAPH_ITER_ACC}
+\insertfig{figures/Perceptron time by increasing maximum number of iterations.pgf}{\lr{Perceptron time by maximum number of iterations}}{PERC_GRAPH_ITER_TIME}
+
+\insertfig{figures/Perceptron accuracy by Learning rate.pgf}{\lr{Perceptron accuracy measures by Learning rate}}{PERC_GRAPH_ETA0_ACC}
+\insertfig{figures/Perceptron time by Learning rate.pgf}{\lr{Perceptron time by Learning rate}}{PERC_GRAPH_ETA0_TIME}
+
+\insertfig{figures/Perceptron accuracy by tolerance.pgf}{\lr{Perceptron accuracy measures by tolerance}}{PERC_GRAPH_TOL_ACC}
+\insertfig{figures/Perceptron time by tolerance.pgf}{\lr{Perceptron time by tolerance}}{PERC_GRAPH_TOL_TIME}
+
+
+\chapter{مقایسه‌ی الگوریتم‌ها}
+الگوریتم‌های
+\verb;Perceptron;
+و
+\verb;KNN;
+همواره بدون خطا بودند.
+بیشترین دقت بعد از آنها
+\verb;Decision Tree;
+و
+در آخر
+\verb;Random Forest;
+بود.
+(
+\cref{RESULTS_TAB}
+)
+به لحاظ زمان
+\verb;Perceptron;
+کمترین
+و
+\verb;Random Forest;
+بیشترین زمان اجرا را داشتند.
+\verb;KNN;
+و
+\verb;Decision Tree;
+با اختلاف کم به ترتیب در جایگاهدوم و سوم بودند.
+
+
+\begin{latin}
+\begin{table}[h!]
+  \begin{center}
+    \caption{\lr{Results}}
+    \label{RESULTS_TAB}
+    \begin{tabular}{r|c|c|c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+  & \textbf{Accuracy}  & \textbf{Edible F1-Score} & \textbf{Piosonous F1-Score} & \textbf{Time} \\
+      \hline
+      \textbf{KNN} & 1.00 & 1.00 & 1.00 & $0.02 \pm 0.005$ \\
+      \textbf{Perceptron} & 1.00 & 1.00 & 1.00 & $0.015 \pm 0.001$ \\
+      \textbf{Decision Tree D2} & 0.95 & 0.96 & 0.96 & 0.019 \\
+      \textbf{Decision Tree D3} & 0.99 & 0.99 & 0.99 & 0.019 \\
+      \textbf{Decision Tree D6} & 1.00 & 1.00 & 1.00 & 0.036 \\
+      \textbf{Random Forest D2} & 0.93 & 0.92 & 0.93 & 0.237 \\
+      \textbf{Random Forest D3} & 0.97 & 0.96 & 0.96 & 0.237 \\
+      \textbf{Random Forest D6} & 1.00 & 1.00 & 1.00 & 0.252 \\
+    \end{tabular}
+  \end{center}
+\end{table}
+\end{latin}
