@@ -25,6 +25,7 @@ def LoadMushrooms(filename=None):
                 categorized_columns.append(f"{column_name}_{val}")
         else:
             categorized_columns.append(f"{column_name}")
+    print(encoder.categories_)
 
     mushrooms = pd.DataFrame(data=mushrooms, columns=categorized_columns)
 
