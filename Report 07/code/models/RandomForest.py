@@ -2,10 +2,11 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import plot_tree
 import os
+import matplotlib
 import matplotlib.pyplot as plt
+from models.Model import Model
 
-
-class RandomForest:
+class RandomForest(Model):
     def __init__(self, X, y, name, feature_names, n_estimators=100,
             criterion="gini", min_samples_split=2,
             max_depth=2, min_samples_leaf=1, PLOT_nrows=3, PLOT_ncols=5):
@@ -13,7 +14,7 @@ class RandomForest:
         self.y = y
         self.model = RandomForestClassifier(n_estimators=n_estimators, criterion=criterion, 
                 min_samples_split=min_samples_split,
-                max_depth=max_depth, min_samples_leaf=min_samples_leaf)
+                max_depth=max_depth, min_samples_leaf=min_samples_leaf, n_jobs=4)
         self.name = name
         self.feature_names = feature_names
         self.PLOT_ncols = PLOT_ncols
@@ -26,8 +27,9 @@ class RandomForest:
         return self.model.predict(data)
 
     def save_output(self):
+        plt.figure()
         fig, axes = plt.subplots(nrows=self.PLOT_nrows, ncols=self.PLOT_ncols,
-                figsize=(10, 10), dpi=900)
+                figsize=(7, 6), dpi=900)
 
         for i in range(15):
             dec_tree = plot_tree(decision_tree=self.model.estimators_[i], 

@@ -1,10 +1,11 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 import os
+import matplotlib
 import matplotlib.pyplot as plt
+from models.Model import Model
 
-
-class DecisionTree:
+class DecisionTree(Model):
     def __init__(self, X, y, name, feature_names, criterion="gini", splitter="best",
             max_depth=2, min_samples_leaf=1):
         self.X = X
@@ -21,8 +22,9 @@ class DecisionTree:
         return self.model.predict(data)
 
     def save_output(self):
+        plt.figure()
         fig, axes = plt.subplots(nrows=1, ncols=1,
-                figsize=(10, 10), dpi=900)
+                figsize=(5, 5), dpi=900)
         dec_tree = plot_tree(decision_tree=self.model, feature_names=self.feature_names, 
                              filled=True , precision=4, rounded=True, ax=axes)
         if not os.path.exists(os.path.dirname(os.path.join("./output",
