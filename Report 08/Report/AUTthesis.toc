@@ -1,0 +1,25 @@
+\edef \SavedTocDepth {\the \value {tocdepth}}
+\setcounter {tocdepth}{-10}
+\contentsline {chapter}{فهرست اشکال}{ج}{section*.3}%
+\contentsline {chapter}{فهرست جداول}{د}{section*.4}%
+\par عنوان\hfill صفحه \par 
+\setcounter {tocdepth}{\SavedTocDepth }
+\contentsline {chapter}{\numberline {1}شرح مسئله و روند کار}{1}{chapter.1}%
+\contentsline {section}{\numberline {1-1}مقدمه}{2}{section.1.1}%
+\contentsline {section}{\numberline {1-2}روش اجرا}{2}{section.1.2}%
+\contentsline {chapter}{\numberline {2}دیتاست}{3}{chapter.2}%
+\contentsline {subsection}{\numberline {2-0-1}تبدیل دسته‌بندی‌ها به اعداد}{5}{subsection.2.0.1}%
+\contentsline {chapter}{\numberline {3}الگوریتم‌ها}{7}{chapter.3}%
+\contentsline {section}{\numberline {3-1}\lr {\ttfamily {Model}}}{8}{section.3.1}%
+\contentsline {section}{\numberline {3-2}\lr {\ttfamily {Decision Tree}}}{8}{section.3.2}%
+\contentsline {subsection}{\numberline {3-2-1}خروجی}{10}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3-2-2}بررسی الگوریتم}{10}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3-3}\lr {\ttfamily {Random Forest}}}{14}{section.3.3}%
+\contentsline {subsection}{\numberline {3-3-1}بررسی الگوریتم}{16}{subsection.3.3.1}%
+\contentsline {section}{\numberline {3-4}\lr {\ttfamily {Perceptron and KNN}}}{16}{section.3.4}%
+\contentsline {section}{\numberline {3-5}خروجی}{23}{section.3.5}%
+\contentsline {subsection}{\numberline {3-5-1}بررسی الگوریتم}{24}{subsection.3.5.1}%
+\contentsline {chapter}{\numberline {4}مقایسه‌ی الگوریتم‌ها}{30}{chapter.4}%
+\contentsline {chapter}{منابع و مراجع}{32}{appendix*.5}%
+\contentsline {chapter}{پیوست}{33}{appendix*.6}%
+\contentsfinish 
